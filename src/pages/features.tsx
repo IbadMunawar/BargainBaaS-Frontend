@@ -17,7 +17,7 @@ const FeaturesPage: React.FC = () => {
   return (
     <>
       <Head>
-        <title>Features & Technology | BargainBaaS</title>
+        <title>Features &amp; Technology | BargainBaaS</title>
       </Head>
 
       <Navbar />
@@ -41,7 +41,7 @@ const FeaturesPage: React.FC = () => {
             <div className="grid md:grid-cols-2 gap-12 items-center">
               <div>
                 <p className="text-gray-700 mb-4">
-                  Our core engine combines the flexibility of **Natural Language Processing (NLP)** with the safety of **Rule-Based Logic**. This means the chatbot can understand a customer&apos;s unstructured message ("Can I get 10% off if I buy two?") while strictly adhering to your pre-set profit floor.
+                  Our core engine combines the flexibility of **Natural Language Processing (NLP)** with the safety of **Rule-Based Logic**. This means the chatbot can understand a customer&apos;s unstructured message (&quot;Can I get 10% off if I buy two?&quot;) while strictly adhering to your pre-set profit floor.
                 </p>
                 <ul className="list-disc list-inside space-y-2 text-gray-700 ml-4">
                   <li>**Intent Detection:** Accurately identifies negotiation intent, aggression levels, and specific price requests.</li>
@@ -51,7 +51,7 @@ const FeaturesPage: React.FC = () => {
               </div>
               <div className="bg-gray-100 p-8 rounded-xl shadow-inner">
                 <p className="text-gray-500 text-center">
-                  [Diagram Placeholder: NLP & Rule Engine Flow]
+                  [Diagram Placeholder: NLP &amp; Rule Engine Flow]
                 </p>
               </div>
             </div>
