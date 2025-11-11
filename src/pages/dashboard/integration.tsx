@@ -29,7 +29,9 @@ const Integration = () => {
         }
       } catch (err) {
         console.error('Failed to load API Key:', err);
-        setError(err.message || 'Failed to connect to the API server.');
+        // CHANGED: Safely handle 'unknown' error type
+        const errorMessage = (err && typeof err === 'object' && 'message' in err) ? (err as Error).message : 'Failed to connect to the API server.';
+        setError(errorMessage as string); 
         setApiKey('ERROR LOADING KEY');
       } finally {
         setIsLoading(false);
@@ -59,7 +61,7 @@ const Integration = () => {
   };
   
   // Fallback function for copying text using document.execCommand
-  const fallbackCopyTextToClipboard = (text) => {
+  const fallbackCopyTextToClipboard = (text: string) => { // Added type for 'text'
     const textArea = document.createElement("textarea");
     textArea.value = text;
     // Avoid scrolling to bottom
@@ -80,7 +82,9 @@ const Integration = () => {
           console.error('Fallback: Copying text command failed');
       }
     } catch (err) {
-      console.error('Fallback: Oops, unable to copy', err);
+      // CHANGED: Safely handle 'unknown' error type
+      const errorMessage = (err && typeof err === 'object' && 'message' in err) ? (err as Error).message : 'Unknown error during copy fallback.';
+      console.error('Fallback: Oops, unable to copy', errorMessage);
     }
 
     document.body.removeChild(textArea);

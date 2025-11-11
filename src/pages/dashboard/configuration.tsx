@@ -37,7 +37,7 @@ const Configuration = () => {
         console.error('Failed to load configuration:', err);
         // CHANGED: Safely handle 'unknown' error type
         const errorString = err instanceof Error ? err.message : 'Failed to load configuration. Please try logging in again.';
-        setError(errorString);
+        setError(errorString as string); // Added 'as string' cast
       } finally {
         setIsLoading(false);
       }
@@ -47,7 +47,7 @@ const Configuration = () => {
   }, []); // Empty dependency array means this runs only once on mount
 
   // REPLACED LOGIC: Live form submission handler
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => { // CHANGED: Added event type
     e.preventDefault();
     
     // Do nothing if the value hasn't changed
@@ -73,7 +73,7 @@ const Configuration = () => {
       console.error('Error saving configuration:', err);
       // CHANGED: Safely handle 'unknown' error type
       const errorString = err instanceof Error ? err.message : 'Failed to save configuration. Please ensure the URL is valid.';
-      setError(errorString);
+      setError(errorString as string); // Added 'as string' cast
     } finally {
       setIsLoading(false);
     }
@@ -149,8 +149,6 @@ const Configuration = () => {
               className={`w-full sm:w-auto flex items-center justify-center px-6 py-2 border border-transparent text-base font-medium rounded-lg shadow-sm text-white transition duration-150 ${
                 isLoading
                   ? 'bg-primary-400 cursor-not-allowed'
-                  // Note: The original code used 'policyEndpoint === initialPolicyEndpoint' to disable, 
-                  // but your provided code didn't include that, so I am matching your provided code.
                   : 'bg-primary-600 hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500'
               }`}
             >
