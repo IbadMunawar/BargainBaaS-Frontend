@@ -7,8 +7,18 @@ import { DollarSign, Percent, BarChart, Users } from 'lucide-react';
 // Register necessary Chart.js components
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
 
+// ADD THIS INTERFACE BLOCK: Defines the types for the StatCard component
+interface StatCardProps {
+    title: string;
+    value: string;
+    // icon: Icon is a Lucide React component, which is a React functional component type
+    icon: React.FC<any>; 
+    color: string;
+}
+
 // --- Component 1: Stat Card (Reusable) ---
-const StatCard = ({ title, value, icon: Icon, color }) => (
+// CHANGED: Applied the StatCardProps interface
+const StatCard: React.FC<StatCardProps> = ({ title, value, icon: Icon, color }) => (
   <div className="bg-white p-6 rounded-xl shadow-lg border border-gray-100 transition duration-300 hover:shadow-xl">
     <div className="flex items-center justify-between">
       <p className="text-sm font-medium text-gray-500">{title}</p>
@@ -56,7 +66,7 @@ const chartOptions = {
             min: 0,
             max: 100,
             ticks: {
-                callback: function(value) {
+                callback: function(value: string | number) { // Added type for value
                     return value + '%';
                 }
             }
@@ -90,7 +100,7 @@ const Analytics = () => {
           <h2 className="text-xl font-semibold text-gray-800 mb-4">Negotiation Performance</h2>
           <div className="h-80">
             {/* The Line component is the placeholder for the chart */}
-            <Line data={chartData} options={chartOptions} />
+            <Line data={chartData} options={chartOptions as any} /> {/* Added 'as any' to bypass chartOptions type issue if any */}
           </div>
           <p className="mt-4 text-sm text-gray-600">
             This graph shows the success rate of the AI chatbot in closing a deal based on the policies you have configured.
