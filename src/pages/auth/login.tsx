@@ -2,16 +2,58 @@ import Head from 'next/head';
 import Link from 'next/link';
 import { Mail, Lock, LogIn } from 'lucide-react';
 import React, { useState } from 'react';
+import { useRouter } from 'next/router';
 
 const LoginPage: React.FC = () => {
   // UI-ONLY: State to track form inputs
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  // UI-ONLY: Placeholder function
-  const handleSubmit = (e: React.FormEvent) => {
+  // State for network feedback
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const router = useRouter(); // Initialize router
+
+  // REPLACED: Placeholder function with network logic
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('Login attempt (UI ONLY):', { email, password });
+    setError(null);
+    setIsLoading(true);
+
+    try {
+      const response = await fetch('https://web-production-d88ec.up.railway.app/api/auth/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email, password }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        // Success: Store the JWT and user email, then redirect
+        const token = data.access_token;
+        localStorage.setItem('jwt_token', token);
+        localStorage.setItem('user_email', email); // Save email for dashboard greeting
+        
+        // Use the Next.js router to redirect to the dashboard
+        router.push('/dashboard');
+      } else {
+        // Failure: Set the error message (using the backend detail or a generic message)
+        const errorMessage = data.detail || 'Login failed. Please check your credentials.';
+        setError(errorMessage);
+      }
+    } catch (err) {
+      // Network or unexpected error
+      // ⬇️ REPLACED LINE: Safely convert the error object to a string for display
+      const errorString = err instanceof Error ? err.message : 'An unexpected network error occurred. Check your connection.';
+      setError(errorString); 
+      console.error('Login Error:', err);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -32,6 +74,14 @@ const LoginPage: React.FC = () => {
               Sign in to your account
             </h2>
           </div>
+
+          {/* Error Alert */}
+          {error && (
+            <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-lg relative" role="alert">
+              <span className="block sm:inline">{error}</span>
+            </div>
+          )}
+          {/* End Error Alert */}
 
           <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
             <div className="rounded-md shadow-sm -space-y-px">
@@ -91,12 +141,13 @@ const LoginPage: React.FC = () => {
             <div>
               <button
                 type="submit"
+                disabled={isLoading}
                 className="group relative w-full flex justify-center py-3 px-4 border border-transparent text-sm font-medium rounded-lg text-white bg-primary-800 hover:bg-primary-900 transition duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 shadow-md"
               >
                 <span className="absolute left-0 inset-y-0 flex items-center pl-3">
                   <LogIn className="h-5 w-5 text-primary-300 group-hover:text-white" aria-hidden="true" />
                 </span>
-                Sign in
+                {isLoading ? 'Signing In...' : 'Sign in'}
               </button>
             </div>
             

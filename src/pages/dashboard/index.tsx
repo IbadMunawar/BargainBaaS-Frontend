@@ -1,35 +1,104 @@
-import Head from 'next/head';
+import React from 'react';
 import DashboardLayout from '../../components/layout/DashboardLayout';
+import { Line } from 'react-chartjs-2';
+import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend } from 'chart.js';
+import { DollarSign, Percent, BarChart, Users } from 'lucide-react';
 
-const AnalyticsPage: React.FC = () => {
+// Register necessary Chart.js components
+ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
+
+// --- Component 1: Stat Card (Reusable) ---
+const StatCard = ({ title, value, icon: Icon, color }) => (
+  <div className="bg-white p-6 rounded-xl shadow-lg border border-gray-100 transition duration-300 hover:shadow-xl">
+    <div className="flex items-center justify-between">
+      <p className="text-sm font-medium text-gray-500">{title}</p>
+      <Icon className={`h-6 w-6 ${color}`} />
+    </div>
+    <p className="mt-1 text-3xl font-bold text-gray-900">{value}</p>
+    {/* Placeholder for future trend line */}
+    <p className="mt-2 text-xs text-gray-400">Past 30 days data</p>
+  </div>
+);
+
+// --- Component 2: Chart Placeholder Data ---
+const chartData = {
+  labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul'],
+  datasets: [
+    {
+      label: 'Negotiation Success Rate',
+      data: [65, 59, 80, 81, 56, 55, 60],
+      borderColor: '#3b82f6', // Primary color for the line
+      backgroundColor: 'rgba(59, 130, 246, 0.1)',
+      tension: 0.4,
+      pointRadius: 5,
+      pointHoverRadius: 7,
+      fill: true,
+    },
+  ],
+};
+
+const chartOptions = {
+    responsive: true,
+    plugins: {
+        legend: {
+            display: false,
+        },
+        title: {
+            display: true,
+            text: 'Success Rate Over Time',
+            font: {
+                size: 16,
+            }
+        },
+    },
+    scales: {
+        y: {
+            min: 0,
+            max: 100,
+            ticks: {
+                callback: function(value) {
+                    return value + '%';
+                }
+            }
+        }
+    }
+};
+
+// --- Main Component: Analytics ---
+const Analytics = () => {
+  // Hard-coded stat values for the shell
+  const stats = [
+    { title: 'Total Negotiations', value: '4,520', icon: BarChart, color: 'text-blue-600' },
+    { title: 'Success Rate', value: '62.4%', icon: Percent, color: 'text-green-600' },
+    { title: 'Avg. Discount Given', value: '7.5%', icon: DollarSign, color: 'text-red-600' },
+    { title: 'Active Products', value: '18', icon: Users, color: 'text-purple-600' },
+  ];
+
   return (
-    <>
-      <Head>
-        <title>Analytics | BargainBaaS Dashboard</title>
-      </Head>
-      
-      <p className="text-gray-500 italic">
-        This page will contain conversion charts, negotiation success rates, and API usage statistics.
-      </p>
-      <div className="mt-8 grid md:grid-cols-3 gap-6">
-        {/* Placeholder Cards */}
-        <div className="p-4 border border-gray-200 rounded-lg h-32 flex items-center justify-center bg-gray-50">
-            <span className="text-gray-700">Total Sessions: 0</span>
+    <DashboardLayout pageTitle="Analytics Overview">
+      <div className="space-y-8">
+        
+        {/* Stat Cards Grid */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          {stats.map((stat, index) => (
+            <StatCard key={index} {...stat} />
+          ))}
         </div>
-        <div className="p-4 border border-gray-200 rounded-lg h-32 flex items-center justify-center bg-gray-50">
-            <span className="text-gray-700">Conversion Rate: 0%</span>
-        </div>
-        <div className="p-4 border border-gray-200 rounded-lg h-32 flex items-center justify-center bg-gray-50">
-            <span className="text-gray-700">Avg Discount: $0</span>
+
+        {/* Chart Component Shell */}
+        <div className="bg-white p-6 rounded-xl shadow-lg border border-gray-100">
+          <h2 className="text-xl font-semibold text-gray-800 mb-4">Negotiation Performance</h2>
+          <div className="h-80">
+            {/* The Line component is the placeholder for the chart */}
+            <Line data={chartData} options={chartOptions} />
+          </div>
+          <p className="mt-4 text-sm text-gray-600">
+            This graph shows the success rate of the AI chatbot in closing a deal based on the policies you have configured.
+          </p>
         </div>
       </div>
-    </>
+    </DashboardLayout>
   );
 };
 
-// Wrap the page in the layout
-(AnalyticsPage as any).getLayout = (page: React.ReactNode) => (
-    <DashboardLayout pageTitle="Dashboard Analytics">{page}</DashboardLayout>
-);
-
-export default AnalyticsPage;
+export default Analytics;

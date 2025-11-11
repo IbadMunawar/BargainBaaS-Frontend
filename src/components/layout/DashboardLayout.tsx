@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react'; // ADDED useEffect
 import { LayoutDashboard, Key, Settings, Book, Menu, X, LogOut, Code } from 'lucide-react';
 
 // Define the structure for the sidebar links
@@ -16,17 +16,34 @@ interface DashboardLayoutProps {
 }
 
 const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children, pageTitle }) => {
+  // REPLACED placeholder state with dynamic state
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [userName, setUserName] = useState('Developer'); // State for the dynamic user name
   
-  
+  // This effect runs once to read the user's name/email from local storage
+  useEffect(() => {
+    // We check for the name first, and fall back to the email if the name isn't set
+    const storedName = localStorage.getItem('user_name');
+    const storedEmail = localStorage.getItem('user_email');
+    
+    if (storedName) {
+      setUserName(storedName.split(' ')[0]); // Use first name if available
+    } else if (storedEmail) {
+      setUserName(storedEmail); // Fall back to email
+    }
+  }, []); // Run only on initial mount
 
-  // Placeholder for future user name
-  const userName = 'Developer Ibad'; 
-  // Placeholder for future logout function
+  // Functional logout logic
   const handleLogout = () => {
-    console.log('Logout attempted (UI ONLY)');
-    // In future, we will clear auth and redirect to /auth/login
+    // 1. Clear all authentication tokens and user info
+    localStorage.removeItem('jwt_token');
+    localStorage.removeItem('user_email');
+    localStorage.removeItem('user_name');
+
+    // 2. Redirect the user to the login page
+    window.location.href = '/auth/login'; 
   };
+  // END REPLACEMENT
 
   return (
     <div className="flex h-screen bg-gray-100 font-sans antialiased">
@@ -83,7 +100,7 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children, pageTitle }
              <button
                 onClick={handleLogout}
                 className="w-full flex items-center px-4 py-3 text-sm font-medium text-red-300 rounded-lg hover:bg-primary-700 hover:text-white transition duration-150"
-            >
+             >
                 <LogOut className="h-5 w-5 mr-3" />
                 Logout
             </button>
@@ -97,8 +114,9 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children, pageTitle }
         <header className="h-16 flex items-center justify-end bg-white border-b border-gray-200 shadow-sm px-6">
           <div className="flex items-center space-x-4">
             <span className="text-gray-700 font-medium hidden sm:inline">Welcome, {userName}</span>
+            {/* UPDATED Avatar to use dynamic state */}
             <div className="h-8 w-8 bg-primary-100 rounded-full flex items-center justify-center text-primary-800 font-semibold">
-                {userName.charAt(0)}
+                {userName.charAt(0).toUpperCase()}
             </div>
           </div>
         </header>

@@ -1,92 +1,168 @@
-import Head from 'next/head';
+import React, { useState, useEffect } from 'react'; // Added useEffect
 import DashboardLayout from '../../components/layout/DashboardLayout';
-import React, { useState } from 'react';
+import { Save, Info, Link as LinkIcon, AlertTriangle } from 'lucide-react';
+import { authFetch } from '../../services/api'; // Added authFetch import
 
-const ConfigurationPage: React.FC = () => {
-    // UI-ONLY: State for form
-    const [endpointUrl, setEndpointUrl] = useState('https://your-shop.com/api/bargain/callback');
-    const [minPriceFloor, setMinPriceFloor] = useState(70);
+const Configuration = () => {
+  // Task: The form should be stateful (using useState).
+  const [policyEndpoint, setPolicyEndpoint] = useState('');
 
-    const handleSubmit = (e: React.FormEvent) => {
-        e.preventDefault();
-        console.log('Configuration saved (UI ONLY):', { endpointUrl, minPriceFloor });
+  // ADDED: State to track the initially loaded value
+  const [initialPolicyEndpoint, setInitialPolicyEndpoint] = useState('');
+  
+  // Placeholders for future integration (Day 5 logic)
+  const [isLoading, setIsLoading] = useState(false); // isLoading is now used for GET too
+  const [saveSuccess, setSaveSuccess] = useState(false);
+  const [error, setError] = useState(null);
+
+  // NEW CODE: useEffect hook to load the current configuration
+  useEffect(() => {
+    const loadConfiguration = async () => {
+      setIsLoading(true);
+      setError(null);
+      setSaveSuccess(false); // Clear previous save success message
+
+      try {
+        const response = await authFetch('configuration');
+        
+        // Backend returns client_policy_api_endpoint and client_api_key
+        const data = response.data; 
+
+        if (data.client_policy_api_endpoint) {
+          // Set both the display state and the initial state for comparison
+          setPolicyEndpoint(data.client_policy_api_endpoint);
+          setInitialPolicyEndpoint(data.client_policy_api_endpoint);
+        }
+      } catch (err) {
+        console.error('Failed to load configuration:', err);
+        setError('Failed to load configuration. Please try logging in again.');
+      } finally {
+        setIsLoading(false);
+      }
     };
 
-  return (
-    <>
-      <Head>
-        <title>Configuration | BargainBaaS Dashboard</title>
-      </Head>
+    loadConfiguration();
+  }, []); // Empty dependency array means this runs only once on mount
+
+  // REPLACED LOGIC: Live form submission handler
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    
+    // Do nothing if the value hasn't changed
+    if (policyEndpoint === initialPolicyEndpoint) {
+      setSaveSuccess(true);
+      return;
+    }
+
+    setIsLoading(true);
+    setError(null);
+    setSaveSuccess(false);
+
+    try {
+      // Use authFetch for the authenticated POST request
+      await authFetch('configuration', 'POST', {
+        client_policy_api_endpoint: policyEndpoint,
+      });
       
-      <p className="text-gray-500 mb-8">
-        Manage your service endpoint and define the core rules for the bargaining engine.
-      </p>
+      // On successful save
+      setInitialPolicyEndpoint(policyEndpoint); // Update the initial state
+      setSaveSuccess(true);
+    } catch (err) {
+      console.error('Error saving configuration:', err);
+      setError(err.message || 'Failed to save configuration. Please ensure the URL is valid.');
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
-      <form onSubmit={handleSubmit} className="space-y-8 max-w-2xl">
+  return (
+    // We assume DashboardLayout is imported from '../../components/layout/DashboardLayout'
+    <DashboardLayout pageTitle="Policy Engine Configuration">
+      <div className="max-w-4xl mx-auto">
         
-        {/* Endpoint URL Configuration */}
-        <div>
-          <h2 className="text-xl font-semibold text-gray-900 mb-3 border-b pb-2">API Callback Settings</h2>
-          <label htmlFor="endpoint" className="block text-sm font-medium text-gray-700 mb-1">
-            Negotiated Price Callback URL
-          </label>
-          <input
-            id="endpoint"
-            type="url"
-            value={endpointUrl}
-            onChange={(e) => setEndpointUrl(e.target.value)}
-            required
-            className="w-full p-3 border border-gray-300 rounded-lg text-sm focus:ring-primary-500 focus:border-primary-500"
-            placeholder="e.g., https://your-shop.com/api/bargain/callback"
-          />
-          <p className="mt-2 text-xs text-gray-500">
-            This is where BargainBaaS sends the final, negotiated price after a deal is closed.
-          </p>
+        {/* Helper Card / Explanation */}
+        <div className="flex items-start p-4 mb-6 bg-blue-50 border border-blue-200 rounded-lg shadow-sm">
+          <Info className="h-5 w-5 mt-0.5 text-blue-600 flex-shrink-0" />
+          <div className="ml-3 text-sm text-blue-800">
+            <h3 className="font-semibold text-blue-900">What is the Policy Endpoint?</h3>
+            <p>
+              This is the URL of your external pricing engine that BargainBaaS will call to get the minimum acceptable margin (MAM) and current asking price for a product. It allows our AI to negotiate within your defined profit boundaries.
+            </p>
+            <p className="mt-2 font-medium">
+              Example format: <code className="bg-blue-100 text-blue-900 px-1 py-0.5 rounded text-xs">https://your-domain.com/api/product-policy</code>
+            </p>
+          </div>
         </div>
-
-        {/* Negotiation Rules Configuration */}
-        <div>
-          <h2 className="text-xl font-semibold text-gray-900 mb-3 border-b pb-2">Profit Protection Rules (RBE)</h2>
+        
+        {/* Configuration Card with Form */}
+        <div className="bg-white p-6 rounded-xl shadow-lg border border-gray-100">
+          <h2 className="text-xl font-semibold text-gray-800 mb-4 flex items-center">
+            <LinkIcon className="h-5 w-5 mr-2 text-primary-600" />
+            Client Policy Engine URL
+          </h2>
           
-          <label htmlFor="min-floor" className="block text-sm font-medium text-gray-700 mb-1">
-            Minimum Price Floor (%)
-          </label>
-          <input
-            id="min-floor"
-            type="number"
-            min="1"
-            max="99"
-            value={minPriceFloor}
-            onChange={(e) => setMinPriceFloor(parseInt(e.target.value))}
-            required
-            className="w-full md:w-1/3 p-3 border border-gray-300 rounded-lg text-sm focus:ring-primary-500 focus:border-primary-500"
-          />
-          <p className="mt-2 text-xs text-gray-500">
-            Guaranteed minimum price, expressed as a percentage of the original price (e.g., 70% means max 30% discount).
-          </p>
-
-            {/* Other rule placeholders */}
-            <div className="mt-4 p-4 bg-gray-50 rounded-lg text-sm text-gray-600 border border-gray-200">
-                <p>Rule Placeholder: Define Max Negotiation Rounds (Future feature)</p>
-                <p>Rule Placeholder: Discount Step Increment (Future feature)</p>
+          <form onSubmit={handleSubmit}>
+            <div className="mb-4">
+              <label htmlFor="policy-endpoint" className="block text-sm font-medium text-gray-700 mb-1">
+                Your External Policy Engine API Endpoint URL
+              </label>
+              <input
+                type="url"
+                id="policy-endpoint"
+                name="policy-endpoint"
+                placeholder={isLoading ? "Loading configuration..." : "Enter your policy API URL here"} // Improved placeholder
+                required
+                value={policyEndpoint}
+                onChange={(e) => {
+                  setPolicyEndpoint(e.target.value);
+                  // Clear messages when user starts typing again
+                  setSaveSuccess(false);
+                  setError(null);
+                }}
+                className="w-full px-4 py-2 text-gray-800 border border-gray-300 rounded-lg focus:ring-primary-500 focus:border-primary-500 shadow-sm transition duration-150 disabled:bg-gray-50 disabled:text-gray-500"
+                disabled={isLoading}
+              />
             </div>
+            
+            {/* Status Messages */}
+            {saveSuccess && (
+              <div className="p-3 mb-4 text-sm font-medium text-green-800 bg-green-100 rounded-lg" role="alert">
+                Configuration saved successfully!
+              </div>
+            )}
 
+            {error && (
+              <div className="p-3 mb-4 text-sm font-medium text-red-800 bg-red-100 rounded-lg flex items-center" role="alert">
+                 <AlertTriangle className="h-4 w-4 mr-2" />
+                 {error}
+              </div>
+            )}
+
+            {/* Save Button */}
+            <button
+              type="submit"
+              disabled={isLoading}
+              className={`w-full sm:w-auto flex items-center justify-center px-6 py-2 border border-transparent text-base font-medium rounded-lg shadow-sm text-white transition duration-150 ${
+                isLoading
+                  ? 'bg-primary-400 cursor-not-allowed'
+                  : 'bg-primary-600 hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500'
+              }`}
+            >
+              {isLoading ? (
+                <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
+              ) : (
+                <Save className="h-5 w-5 mr-2" />
+              )}
+              {isLoading ? 'Processing...' : 'Save Configuration'} {/* Changed text to be more general */}
+            </button>
+          </form>
         </div>
-
-        <button
-          type="submit"
-          className="px-6 py-3 border border-transparent text-sm font-medium rounded-lg text-white bg-primary-800 hover:bg-primary-900 transition duration-300 shadow-md"
-        >
-          Save Configuration
-        </button>
-      </form>
-    </>
+      </div>
+    </DashboardLayout>
   );
 };
 
-// Wrap the page in the layout
-(ConfigurationPage as any).getLayout = (page: React.ReactNode) => (
-    <DashboardLayout pageTitle="Configuration">{page}</DashboardLayout>
-);
-
-export default ConfigurationPage;
+export default Configuration;
