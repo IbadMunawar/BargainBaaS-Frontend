@@ -13,8 +13,8 @@ const Configuration = () => {
   // Placeholders for future integration (Day 5 logic)
   const [isLoading, setIsLoading] = useState(false); // isLoading is now used for GET too
   const [saveSuccess, setSaveSuccess] = useState(false);
-  const [error, setError] = useState(null);
-
+  const [error, setError] = useState<string | null>(null);
+  
   // NEW CODE: useEffect hook to load the current configuration
   useEffect(() => {
     const loadConfiguration = async () => {

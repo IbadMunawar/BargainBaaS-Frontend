@@ -7,7 +7,7 @@ const Integration = () => {
   // REPLACED mock data with live state
   const [apiKey, setApiKey] = useState('Loading API Key...'); // Initial message while loading
   const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState<string | null>(null);
   const [isCopied, setIsCopied] = useState(false);
 
   // NEW CODE: useEffect hook to load the API Key
