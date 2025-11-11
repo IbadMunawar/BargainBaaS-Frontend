@@ -15,7 +15,7 @@ const LoginPage: React.FC = () => {
 
   const router = useRouter(); // Initialize router
 
-  // ADDED BLOCK: Guarantee the error state is a string
+  // ADDED BLOCK: Guarantee the error state is a string (Crash Prevention)
   useEffect(() => {
     if (error && typeof error !== 'string') {
       console.error("Corrupted error state detected. Auto-correcting.", error);
@@ -108,7 +108,7 @@ const LoginPage: React.FC = () => {
                     className="appearance-none rounded-t-lg relative block w-full pl-10 pr-3 py-3 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-primary-500 focus:border-primary-500 text-sm"
                     placeholder="Email address"
                     value={email}
-                    onChange={(e) => setEmail(e.preventDefault())}
+                    onChange={(e) => setEmail(e.target.value)} // FIX: Use the input value
                   />
                 </div>
               </div>
@@ -127,7 +127,7 @@ const LoginPage: React.FC = () => {
                     className="appearance-none rounded-b-lg relative block w-full pl-10 pr-3 py-3 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-primary-500 focus:border-primary-500 text-sm"
                     placeholder="Password"
                     value={password}
-                    onChange={(e) => setPassword(e.target.value)}
+                    onChange={(e) => setPassword(e.target.value)} // This was already correct
                   />
                 </div>
               </div>
