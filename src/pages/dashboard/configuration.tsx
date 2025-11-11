@@ -35,7 +35,9 @@ const Configuration = () => {
         }
       } catch (err) {
         console.error('Failed to load configuration:', err);
-        setError(err.message || 'Failed to load configuration. Please try logging in again.'); // Set error message from error object
+        // CHANGED: Safely handle 'unknown' error type
+        const errorString = err instanceof Error ? err.message : 'Failed to load configuration. Please try logging in again.';
+        setError(errorString);
       } finally {
         setIsLoading(false);
       }
@@ -69,7 +71,9 @@ const Configuration = () => {
       setSaveSuccess(true);
     } catch (err) {
       console.error('Error saving configuration:', err);
-      setError(err.message || 'Failed to save configuration. Please ensure the URL is valid.');
+      // CHANGED: Safely handle 'unknown' error type
+      const errorString = err instanceof Error ? err.message : 'Failed to save configuration. Please ensure the URL is valid.';
+      setError(errorString);
     } finally {
       setIsLoading(false);
     }
