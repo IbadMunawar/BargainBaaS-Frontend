@@ -18,7 +18,7 @@ const getAuthToken = () => {
  * @param {string} endpoint - The path (e.g., '/configuration'). The full URL will be API_BASE_URL + endpoint.
  * @param {string} method - The HTTP method (e.g., 'GET', 'POST'). Defaults to 'GET'.
  * @param {object} [data=null] - The payload body for POST/PUT requests.
- * @returns {Promise<object>} The JSON response data.
+ * @returns {Promise<Response>} The raw Fetch Response object.
  */
 export const authFetch = async (endpoint, method = 'GET', data = null) => {
     const token = getAuthToken();
@@ -76,8 +76,6 @@ export const authFetch = async (endpoint, method = 'GET', data = null) => {
         throw new Error(errorMessage);
     }
 
-    // Return the JSON body for successful requests
-    // We return response.data if the caller needs the whole axios response
-    // But since we used fetch, we just return the parsed JSON data here.
-    return response.json();
+    // Return the raw response object
+    return response;
 };

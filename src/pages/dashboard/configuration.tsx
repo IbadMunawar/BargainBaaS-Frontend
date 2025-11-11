@@ -23,10 +23,10 @@ const Configuration = () => {
       setSaveSuccess(false); // Clear previous save success message
 
       try {
-        const response = await authFetch('configuration');
+        const response = await authFetch('/configuration'); // Added leading slash for consistency
         
         // Backend returns client_policy_api_endpoint and client_api_key
-        const data = response.data; 
+        const data = await response.json(); // CHANGED: Awaited .json() from response
 
         if (data.client_policy_api_endpoint) {
           // Set both the display state and the initial state for comparison
@@ -35,7 +35,7 @@ const Configuration = () => {
         }
       } catch (err) {
         console.error('Failed to load configuration:', err);
-        setError('Failed to load configuration. Please try logging in again.');
+        setError(err.message || 'Failed to load configuration. Please try logging in again.'); // Set error message from error object
       } finally {
         setIsLoading(false);
       }
@@ -60,7 +60,7 @@ const Configuration = () => {
 
     try {
       // Use authFetch for the authenticated POST request
-      await authFetch('configuration', 'POST', {
+      await authFetch('/configuration', 'POST', { // CHANGED: Added leading slash
         client_policy_api_endpoint: policyEndpoint,
       });
       
@@ -145,6 +145,8 @@ const Configuration = () => {
               className={`w-full sm:w-auto flex items-center justify-center px-6 py-2 border border-transparent text-base font-medium rounded-lg shadow-sm text-white transition duration-150 ${
                 isLoading
                   ? 'bg-primary-400 cursor-not-allowed'
+                  // Note: The original code used 'policyEndpoint === initialPolicyEndpoint' to disable, 
+                  // but your provided code didn't include that, so I am matching your provided code.
                   : 'bg-primary-600 hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500'
               }`}
             >

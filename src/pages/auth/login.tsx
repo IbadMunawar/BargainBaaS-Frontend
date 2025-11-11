@@ -1,7 +1,7 @@
 import Head from 'next/head';
 import Link from 'next/link';
 import { Mail, Lock, LogIn } from 'lucide-react';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react'; // ADDED useEffect
 import { useRouter } from 'next/router';
 
 const LoginPage: React.FC = () => {
@@ -14,6 +14,14 @@ const LoginPage: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
 
   const router = useRouter(); // Initialize router
+
+  // ADDED BLOCK: Guarantee the error state is a string
+  useEffect(() => {
+    if (error && typeof error !== 'string') {
+      console.error("Corrupted error state detected. Auto-correcting.", error);
+      setError('A critical error occurred while processing your login.');
+    }
+  }, [error]); // Run whenever the error state changes
 
   // REPLACED: Placeholder function with network logic
   const handleSubmit = async (e: React.FormEvent) => {
@@ -100,7 +108,7 @@ const LoginPage: React.FC = () => {
                     className="appearance-none rounded-t-lg relative block w-full pl-10 pr-3 py-3 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-primary-500 focus:border-primary-500 text-sm"
                     placeholder="Email address"
                     value={email}
-                    onChange={(e) => setEmail(e.target.value)}
+                    onChange={(e) => setEmail(e.preventDefault())}
                   />
                 </div>
               </div>

@@ -18,8 +18,8 @@ const Integration = () => {
 
       try {
         // Use the same GET endpoint as the Configuration page
-        const response = await authFetch('configuration');
-        const data = response.data;
+        const response = await authFetch('/configuration'); // CHANGED: Added leading slash
+        const data = await response.json(); // CHANGED: Awaited .json() from response
 
         if (data.client_api_key) {
           setApiKey(data.client_api_key);
