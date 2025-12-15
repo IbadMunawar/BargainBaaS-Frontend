@@ -24,13 +24,13 @@ const SignUpPage: React.FC = () => {
 
     try {
       // Note: The backend register endpoint may only require email and password
-      const response = await fetch('https://web-production-d88ec.up.railway.app/api/auth/register', {
+      const response = await fetch('https://web-production-04173.up.railway.app/api/auth/register', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         // We include name if the backend expects it, otherwise focus on email/password
-        body: JSON.stringify({ email, password, name }), 
+        body: JSON.stringify({ email, password, name }),
       });
 
       const data = await response.json();
@@ -39,9 +39,9 @@ const SignUpPage: React.FC = () => {
         // Success: Store the JWT and user info, then redirect
         const token = data.access_token;
         localStorage.setItem('jwt_token', token);
-        localStorage.setItem('user_email', email); 
-        localStorage.setItem('user_name', name); 
-        
+        localStorage.setItem('user_email', email);
+        localStorage.setItem('user_name', name);
+
         // Redirect to the dashboard after successful registration
         router.push('/dashboard');
       } else {
@@ -66,7 +66,7 @@ const SignUpPage: React.FC = () => {
 
       <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
         <div className="max-w-md w-full space-y-8 p-10 bg-white rounded-xl shadow-2xl border border-gray-100">
-          
+
           {/* Header */}
           <div>
             <Link href="/" className="text-3xl font-bold text-primary-800 tracking-wider flex justify-center">
@@ -87,7 +87,7 @@ const SignUpPage: React.FC = () => {
 
           <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
             <div className="rounded-md shadow-sm -space-y-px">
-              
+
               {/* Name Input */}
               <div className="mb-4">
                 <label htmlFor="full-name" className="sr-only">Full Name</label>
@@ -159,13 +159,13 @@ const SignUpPage: React.FC = () => {
                 {isLoading ? 'Registering...' : 'Sign Up'} {/* CHANGED */}
               </button>
             </div>
-            
+
             {/* Link to Login */}
             <div className="text-center text-sm text-gray-600">
-                Already have an account? 
-                <Link href="/auth/login" className="font-medium text-primary-600 hover:text-primary-500 ml-1 transition duration-150">
-                    Sign in here
-                </Link>
+              Already have an account?
+              <Link href="/auth/login" className="font-medium text-primary-600 hover:text-primary-500 ml-1 transition duration-150">
+                Sign in here
+              </Link>
             </div>
           </form>
         </div>

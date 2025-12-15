@@ -1,6 +1,6 @@
 // Base URL for the Backend API. This must match the URL provided by your teammate.
 // Base URL: https://web-production-d88ec.up.railway.app
-const API_BASE_URL = 'https://web-production-d88ec.up.railway.app/api/v1/tenant';
+const API_BASE_URL = 'https://web-production-04173.up.railway.app/api/v1/tenant';
 
 /**
  * Retrieves the JWT from local storage.
@@ -10,7 +10,7 @@ const API_BASE_URL = 'https://web-production-d88ec.up.railway.app/api/v1/tenant'
  */
 const getAuthToken = () => {
     // We assume the token is saved here after successful login/signup
-    return localStorage.getItem('jwt_token'); 
+    return localStorage.getItem('jwt_token');
 };
 
 /**
@@ -28,23 +28,23 @@ export const authFetch = async (endpoint, method = 'GET', data = null) => {
     }
 
     const url = `${API_BASE_URL}${endpoint}`;
-    
+
     const headers = {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`, 
+        'Authorization': `Bearer ${token}`,
     };
 
     const config = {
         method: method.toUpperCase(),
         headers: headers,
         // Using body directly here, outside the catch block
-        body: (data && method.toUpperCase() !== 'GET' && method.toUpperCase() !== 'HEAD') 
-            ? JSON.stringify(data) 
+        body: (data && method.toUpperCase() !== 'GET' && method.toUpperCase() !== 'HEAD')
+            ? JSON.stringify(data)
             : undefined,
     };
-    
+
     console.log(`[API] Making ${config.method} request to: ${url}`);
-    
+
     // Use an internal try/catch for the fetch operation itself (network failure)
     let response;
     try {
@@ -68,11 +68,11 @@ export const authFetch = async (endpoint, method = 'GET', data = null) => {
         } catch (e) {
             // If response is not JSON (e.g., 404 HTML page), use statusText
         }
-        
+
         // Log and throw the structured error string
         const errorMessage = `API Error: ${response.status} - ${errorDetail}`;
         console.error(errorMessage, errorBody);
-        
+
         throw new Error(errorMessage);
     }
 

@@ -6,7 +6,6 @@ import { LayoutDashboard, Key, Settings, Book, Menu, X, LogOut, Code } from 'luc
 const dashboardLinks = [
   { name: 'Analytics', href: '/dashboard', icon: LayoutDashboard },
   { name: 'API Integration', href: '/dashboard/integration', icon: Key },
-  { name: 'Configuration', href: '/dashboard/configuration', icon: Settings },
   { name: 'Documentation', href: '/dashboard/documentation', icon: Book },
 ];
 

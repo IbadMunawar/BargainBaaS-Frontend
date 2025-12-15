@@ -1,16 +1,19 @@
-import React, { useState, useEffect } from 'react'; // ADDED useEffect
+import React, { useState, useEffect } from 'react';
 import DashboardLayout from '../../components/layout/DashboardLayout';
 import { Key, Copy, Check, AlertTriangle, Zap } from 'lucide-react';
-import { authFetch } from '../../services/api'; // ADDED authFetch
+import { authFetch } from '../../services/api';
 
 const Integration = () => {
   // REPLACED mock data with live state
   const [apiKey, setApiKey] = useState('Loading API Key...'); // Initial message while loading
+  const [tenantId, setTenantId] = useState('Loading Tenant ID...'); // ADDED: State for Tenant ID
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [isCopied, setIsCopied] = useState(false);
 
-  // NEW CODE: useEffect hook to load the API Key
+  // ADDED: The fixed URL for the new Push Endpoint (assumes API Base URL is known)
+  const SESSION_INIT_ENDPOINT = 'https://web-production-04173.up.railway.app/api/v1/session/init';
+  // NEW CODE: useEffect hook to load the API Key and Tenant ID
   useEffect(() => {
     const loadApiKey = async () => {
       setIsLoading(true);
@@ -18,21 +21,26 @@ const Integration = () => {
 
       try {
         // Use the same GET endpoint as the Configuration page
-        const response = await authFetch('/configuration'); // CHANGED: Added leading slash
-        const data = await response.json(); // CHANGED: Awaited .json() from response
+        const response = await authFetch('/configuration');
+        const data = await response.json();
 
+        // ADDED: Logic to retrieve and set Tenant ID
         if (data.client_api_key) {
           setApiKey(data.client_api_key);
+          // ADD THIS LINE (or similar, depending on what the backend provides for ID)
+          setTenantId(data.tenant_id || 'ina-tenant-001'); // Assuming tenant_id is available in the response
         } else {
           // Should not happen if API is built correctly, but good for safety
           setApiKey('API Key Not Found');
+          setTenantId('N/A');
         }
       } catch (err) {
         console.error('Failed to load API Key:', err);
         // CHANGED: Safely handle 'unknown' error type
         const errorMessage = (err && typeof err === 'object' && 'message' in err) ? (err as Error).message : 'Failed to connect to the API server.';
-        setError(errorMessage as string); 
+        setError(errorMessage as string);
         setApiKey('ERROR LOADING KEY');
+        setTenantId('ERROR LOADING ID');
       } finally {
         setIsLoading(false);
       }
@@ -59,9 +67,9 @@ const Integration = () => {
       fallbackCopyTextToClipboard(apiKey);
     }
   };
-  
+
   // Fallback function for copying text using document.execCommand
-  const fallbackCopyTextToClipboard = (text: string) => { // Added type for 'text'
+  const fallbackCopyTextToClipboard = (text: string) => {
     const textArea = document.createElement("textarea");
     textArea.value = text;
     // Avoid scrolling to bottom
@@ -76,10 +84,10 @@ const Integration = () => {
     try {
       const successful = document.execCommand('copy');
       if (successful) {
-          setIsCopied(true);
-          setTimeout(() => setIsCopied(false), 2000);
+        setIsCopied(true);
+        setTimeout(() => setIsCopied(false), 2000);
       } else {
-          console.error('Fallback: Copying text command failed');
+        console.error('Fallback: Copying text command failed');
       }
     } catch (err) {
       // CHANGED: Safely handle 'unknown' error type
@@ -90,7 +98,6 @@ const Integration = () => {
     document.body.removeChild(textArea);
   };
 
-
   return (
     <DashboardLayout pageTitle="API Integration & Keys">
       <div className="max-w-4xl mx-auto">
@@ -98,11 +105,30 @@ const Integration = () => {
         {/* NEW CODE: Error Status Message */}
         {error && (
           <div className="p-4 mb-6 text-sm font-medium text-red-800 bg-red-100 border border-red-200 rounded-lg flex items-center" role="alert">
-             <AlertTriangle className="h-5 w-5 mr-2 flex-shrink-0" />
-             {error}
+            <AlertTriangle className="h-5 w-5 mr-2 flex-shrink-0" />
+            {error}
           </div>
         )}
         {/* End Error Status Message */}
+
+        {/* NEW CODE: Tenant ID Card (Required for Push Model authentication) */}
+        <div className="bg-white p-6 rounded-xl shadow-lg border border-gray-100 mb-6">
+          <h2 className="text-xl font-semibold text-gray-800 mb-4">
+            Your Tenant ID
+          </h2>
+          <input
+            type="text"
+            readOnly
+            value={tenantId}
+            className="w-full px-4 py-3 text-gray-800 bg-gray-50 border border-gray-300 rounded-lg font-mono text-sm shadow-inner select-all overflow-hidden whitespace-nowrap overflow-ellipsis"
+            aria-label="Tenant ID"
+            disabled={isLoading || !!error}
+          />
+          <p className="mt-2 text-sm text-gray-600">
+            This unique ID is used by the Orchestrator internally. It must be provided in the body of the Session Init call.
+          </p>
+        </div>
+        {/* End Tenant ID Card */}
 
         {/* API Key Card */}
         <div className="bg-white p-6 rounded-xl shadow-lg border border-gray-100 mb-6">
@@ -123,24 +149,41 @@ const Integration = () => {
             <button
               onClick={handleCopy}
               disabled={isLoading || !!error || apiKey.startsWith('Loading') || apiKey.includes('ERROR') || apiKey.includes('Not Found')} // UPDATED: Disable logic
-              className={`flex items-center px-4 py-3 border border-transparent text-sm font-medium rounded-r-lg shadow-sm transition duration-150 focus:outline-none focus:ring-2 focus:ring-offset-2 ${
-                isCopied 
-                  ? 'bg-green-500 text-white hover:bg-green-600 focus:ring-green-500' 
+              className={`flex items-center px-4 py-3 border border-transparent text-sm font-medium rounded-r-lg shadow-sm transition duration-150 focus:outline-none focus:ring-2 focus:ring-offset-2 ${isCopied
+                  ? 'bg-green-500 text-white hover:bg-green-600 focus:ring-green-500'
                   : 'bg-primary-600 text-white hover:bg-primary-700 focus:ring-primary-500'
-              } disabled:bg-gray-400 disabled:cursor-not-allowed`}
+                } disabled:bg-gray-400 disabled:cursor-not-allowed`}
             >
               {isCopied ? <Check className="h-5 w-5 mr-1" /> : <Copy className="h-5 w-5 mr-1" />}
               {isCopied ? 'Copied!' : 'Copy to Clipboard'}
             </button>
           </div>
-          
+
           <p className="mt-4 text-sm text-gray-600">
             Use this key to authorize all server-to-server calls to your external Policy Engine (the URL you configured on the Configuration page).
           </p>
         </div>
-        
+
+        {/* NEW CODE: Session Initialization Endpoint Card */}
+        <div className="bg-white p-6 rounded-xl shadow-lg border border-gray-100 mb-6">
+          <h2 className="text-xl font-semibold text-gray-800 mb-4">
+            Session Initialization Endpoint
+          </h2>
+          <input
+            type="text"
+            readOnly
+            value={SESSION_INIT_ENDPOINT}
+            className="w-full px-4 py-3 text-gray-800 bg-gray-50 border border-gray-300 rounded-lg font-mono text-sm shadow-inner select-all overflow-hidden whitespace-nowrap overflow-ellipsis"
+            aria-label="Session Init Endpoint"
+          />
+          <p className="mt-2 text-sm text-gray-600">
+            This is the endpoint your backend must call *before* starting a chat with rules (MAM, Asking Price) in the request body.
+          </p>
+        </div>
+        {/* End Session Initialization Endpoint Card */}
+
         {/* Quickstart/Setup Guide Card */}
-         <div className="flex items-start p-4 bg-yellow-50 border border-yellow-200 rounded-lg shadow-sm">
+        <div className="flex items-start p-4 bg-yellow-50 border border-yellow-200 rounded-lg shadow-sm">
           <Zap className="h-5 w-5 mt-0.5 text-yellow-600 flex-shrink-0" />
           <div className="ml-3 text-sm text-yellow-800">
             <h3 className="font-semibold text-yellow-900">Next Steps: Setup</h3>

@@ -30,7 +30,7 @@ const LoginPage: React.FC = () => {
     setIsLoading(true);
 
     try {
-      const response = await fetch('https://web-production-d88ec.up.railway.app/api/auth/login', {
+      const response = await fetch('https://web-production-04173.up.railway.app/api/auth/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -45,7 +45,7 @@ const LoginPage: React.FC = () => {
         const token = data.access_token;
         localStorage.setItem('jwt_token', token);
         localStorage.setItem('user_email', email); // Save email for dashboard greeting
-        
+
         // Use the Next.js router to redirect to the dashboard
         router.push('/dashboard');
       } else {
@@ -57,7 +57,7 @@ const LoginPage: React.FC = () => {
       // Network or unexpected error
       // ⬇️ REPLACED LINE: Safely convert the error object to a string for display
       const errorString = err instanceof Error ? err.message : 'An unexpected network error occurred. Check your connection.';
-      setError(errorString); 
+      setError(errorString);
       console.error('Login Error:', err);
     } finally {
       setIsLoading(false);
@@ -72,7 +72,7 @@ const LoginPage: React.FC = () => {
 
       <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
         <div className="max-w-md w-full space-y-8 p-10 bg-white rounded-xl shadow-2xl border border-gray-100">
-          
+
           {/* Header */}
           <div>
             <Link href="/" className="text-3xl font-bold text-primary-800 tracking-wider flex justify-center">
@@ -93,7 +93,7 @@ const LoginPage: React.FC = () => {
 
           <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
             <div className="rounded-md shadow-sm -space-y-px">
-              
+
               {/* Email Input */}
               <div className="mb-4">
                 <label htmlFor="email-address" className="sr-only">Email address</label>
@@ -158,13 +158,13 @@ const LoginPage: React.FC = () => {
                 {isLoading ? 'Signing In...' : 'Sign in'}
               </button>
             </div>
-            
+
             {/* Link to Sign Up */}
             <div className="text-center text-sm text-gray-600">
-                Don&apos;t have an account? 
-                <Link href="/auth/signup" className="font-medium text-primary-600 hover:text-primary-500 ml-1 transition duration-150">
-                    Sign up now
-                </Link>
+              Don&apos;t have an account?
+              <Link href="/auth/signup" className="font-medium text-primary-600 hover:text-primary-500 ml-1 transition duration-150">
+                Sign up now
+              </Link>
             </div>
           </form>
         </div>
