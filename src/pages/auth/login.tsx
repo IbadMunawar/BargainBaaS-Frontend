@@ -33,9 +33,12 @@ const LoginPage: React.FC = () => {
       const response = await fetch('https://web-production-04173.up.railway.app/api/auth/login', {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json',
+          'Content-Type': 'application/x-www-form-urlencoded',
         },
-        body: JSON.stringify({ email, password }),
+        body: new URLSearchParams({
+          username: email, // FastAPI OAuth2 expects 'username' even for emails
+          password: password,
+        }).toString(),
       });
 
       const data = await response.json();
@@ -50,13 +53,30 @@ const LoginPage: React.FC = () => {
         router.push('/dashboard');
       } else {
         // Failure: Set the error message (using the backend detail or a generic message)
-        const errorMessage = data.detail || 'Login failed. Please check your credentials.';
+        // Failure: Set the error message (using the backend detail or a generic message)
+        let errorMessage = 'Login failed. Please check your credentials.';
+
+        if (data.detail) {
+          if (typeof data.detail === 'string') {
+            errorMessage = data.detail;
+          } else if (Array.isArray(data.detail)) {
+            // Handle list of validation errors (e.g., Pydantic)
+            // loc is usually ['body', 'field_name'], so we take the last part
+            errorMessage = data.detail.map((err: any) => {
+              const field = err.loc ? err.loc[err.loc.length - 1] : 'Field';
+              return `${field}: ${err.msg}`;
+            }).join(', ');
+          } else if (typeof data.detail === 'object') {
+            errorMessage = (data.detail as any).msg || JSON.stringify(data.detail);
+          }
+        }
+
         setError(errorMessage);
       }
     } catch (err) {
       // Network or unexpected error
       // ⬇️ REPLACED LINE: Safely convert the error object to a string for display
-      const errorString = err instanceof Error ? err.message : 'An unexpected network error occurred. Check your connection.';
+      const errorString = err instanceof Error ? err.message : typeof err === 'string' ? err : 'An unexpected network error occurred. Check your connection.';
       setError(errorString);
       console.error('Login Error:', err);
     } finally {
