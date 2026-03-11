@@ -13,6 +13,18 @@ const Integration = () => {
 
   // ADDED: The fixed URL for the new Push Endpoint (assumes API Base URL is known)
   const SESSION_INIT_ENDPOINT = 'https://ina-backend-fyp.onrender.com/api/v1/session/init';
+
+  // Helper: decode a JWT and return its payload (no signature verification — display only)
+  const decodeJwt = (token: string): Record<string, any> | null => {
+    try {
+      const payloadBase64 = token.split('.')[1];
+      const payloadJson = atob(payloadBase64.replace(/-/g, '+').replace(/_/g, '/'));
+      return JSON.parse(payloadJson);
+    } catch {
+      return null;
+    }
+  };
+
   // NEW CODE: useEffect hook to load the API Key and Tenant ID
   useEffect(() => {
     const loadApiKey = async () => {
@@ -24,19 +36,24 @@ const Integration = () => {
         const response = await authFetch('/configuration');
         const data = await response.json();
 
-        // ADDED: Logic to retrieve and set Tenant ID
         if (data.client_api_key) {
           setApiKey(data.client_api_key);
-          // ADD THIS LINE (or similar, depending on what the backend provides for ID)
-          setTenantId(data.tenant_id || 'ina-tenant-001'); // Assuming tenant_id is available in the response
         } else {
-          // Should not happen if API is built correctly, but good for safety
           setApiKey('API Key Not Found');
-          setTenantId('N/A');
+        }
+
+        // Prefer tenant_id from API response; fall back to decoding it from the JWT
+        if (data.tenant_id) {
+          setTenantId(data.tenant_id);
+        } else {
+          const token = localStorage.getItem('jwt_token');
+          const payload = token ? decodeJwt(token) : null;
+          // JWTs commonly use 'tenant_id', 'sub', or 'user_id' — check all
+          const idFromToken = payload?.tenant_id || payload?.sub || payload?.user_id || null;
+          setTenantId(idFromToken ?? 'Tenant ID not available');
         }
       } catch (err) {
         console.error('Failed to load API Key:', err);
-        // CHANGED: Safely handle 'unknown' error type
         const errorMessage = (err && typeof err === 'object' && 'message' in err) ? (err as Error).message : 'Failed to connect to the API server.';
         setError(errorMessage as string);
         setApiKey('ERROR LOADING KEY');
