@@ -30,7 +30,7 @@ const LoginPage: React.FC = () => {
     setIsLoading(true);
 
     try {
-      const response = await fetch('https://web-production-04173.up.railway.app/api/auth/login', {
+      const response = await fetch('https://ina-backend-fyp.onrender.com/api/auth/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded',

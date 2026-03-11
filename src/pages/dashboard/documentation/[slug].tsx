@@ -8,7 +8,7 @@ import { Info, CheckCircle, Zap } from 'lucide-react';
 
 // Define a type for the page component that includes the getLayout property
 type PageWithLayout = React.FC & {
-  getLayout?: (page: React.ReactElement) => React.ReactNode;
+    getLayout?: (page: React.ReactElement) => React.ReactNode;
 };
 
 // --- CONTENT DEFINITIONS ---
@@ -60,14 +60,14 @@ const DOCS_CONTENT: Record<string, { title: string; content: React.ReactNode }> 
                 <p>This is the most critical step. Your backend must call this endpoint to load negotiation rules into our system **before** the user starts chatting.</p>
                 <h3 className="text-xl font-bold text-gray-900 mt-4">Endpoint</h3>
                 <div className="bg-gray-100 text-gray-900 p-4 rounded-lg font-mono text-sm overflow-x-auto border border-gray-200">
-                    <span className="font-bold text-blue-600">POST</span> https://web-production-d88ec.up.railway.app/api/v1/session/init
+                    <span className="font-bold text-blue-600">POST</span> https://ina-backend-fyp.onrender.com/api/v1/session/init
                 </div>
 
                 <h3 className="text-xl font-bold text-gray-900 mt-4">Required Request Body (JSON)</h3>
                 <p>The body must be JSON, containing the following fields:</p>
                 <div className="bg-gray-100 text-gray-900 p-4 rounded-lg font-mono text-sm overflow-x-auto border border-gray-200">
                     <pre>
-{`{
+                        {`{
   "api_key": "[Your Client API Key]",
   "tenant_id": "[Your Tenant ID]",
   "context_id": "product_sku_1234",
@@ -80,7 +80,7 @@ const DOCS_CONTENT: Record<string, { title: string; content: React.ReactNode }> 
                 <h3 className="text-xl font-bold text-gray-900 mt-4">cURL Example</h3>
                 <div className="bg-gray-100 text-gray-900 p-4 rounded-lg font-mono text-sm overflow-x-auto border border-gray-200">
                     <pre>
-{`curl -X POST "https://web-production-d88ec.up.railway.app/api/v1/session/init" \\
+                        {`curl -X POST "https://ina-backend-fyp.onrender.com/api/v1/session/init" \\
   -H "Authorization: Bearer [YOUR_CLIENT_API_KEY]" \\
   -H "Content-Type: application/json" \\
   -d '{
@@ -102,11 +102,11 @@ const DOCS_CONTENT: Record<string, { title: string; content: React.ReactNode }> 
                 <p>When the AI reaches a final agreement, our system pushes a final confirmation JSON to your chosen callback URL (set during initial onboarding).</p>
                 <h3 className="text-xl font-bold text-gray-900 mt-4">The Final Callback</h3>
                 <p>After a successful deal, our system sends a <code>POST</code> request to the **Callback URL** you provided.</p>
-                
+
                 <h3 className="text-xl font-bold text-gray-900 mt-4">Expected Callback JSON</h3>
                 <div className="bg-green-50 text-green-900 p-4 rounded-lg border-l-4 border-green-500 font-mono text-sm overflow-x-auto">
                     <pre>
-{`{
+                        {`{
   "tenant_id": "tenant-456",
   "context_id": "product-A101",
   "negotiation_status": "deal_accepted",
@@ -129,7 +129,7 @@ const DOCS_CONTENT: Record<string, { title: string; content: React.ReactNode }> 
                 <p>We provide a simple JavaScript snippet to embed the chat widget on your page. **Ensure the session is initialized BEFORE this is loaded.**</p>
                 <div className="bg-gray-100 text-gray-900 p-4 rounded-lg font-mono text-sm overflow-x-auto border border-gray-200">
                     <pre>
-{`<!-- Place this where you want the chat button to appear -->
+                        {`<!-- Place this where you want the chat button to appear -->
 <div id="bargainbaas-chat-widget" 
      data-session-id="[THE SESSION ID RETURNED FROM /session/init]">
 </div>
@@ -147,15 +147,15 @@ const DOCS_CONTENT: Record<string, { title: string; content: React.ReactNode }> 
 // --- MAIN DYNAMIC COMPONENT ---
 const DocumentationContent: PageWithLayout = () => {
     const router = useRouter();
-    const slug = (router.query.slug as string) || 'introduction'; 
+    const slug = (router.query.slug as string) || 'introduction';
 
     const content = DOCS_CONTENT[slug];
 
     if (!content) {
         return (
             <DocsLayout pageTitle="Page Not Found">
-                 <p className="text-red-500 text-lg">404 Error: Documentation page not found for slug: <strong>{slug}</strong></p>
-                 <p className="mt-4">Please check the sidebar links.</p>
+                <p className="text-red-500 text-lg">404 Error: Documentation page not found for slug: <strong>{slug}</strong></p>
+                <p className="mt-4">Please check the sidebar links.</p>
             </DocsLayout>
         );
     }

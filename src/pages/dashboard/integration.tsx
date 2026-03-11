@@ -12,7 +12,7 @@ const Integration = () => {
   const [isCopied, setIsCopied] = useState(false);
 
   // ADDED: The fixed URL for the new Push Endpoint (assumes API Base URL is known)
-  const SESSION_INIT_ENDPOINT = 'https://web-production-04173.up.railway.app/api/v1/session/init';
+  const SESSION_INIT_ENDPOINT = 'https://ina-backend-fyp.onrender.com/api/v1/session/init';
   // NEW CODE: useEffect hook to load the API Key and Tenant ID
   useEffect(() => {
     const loadApiKey = async () => {
@@ -150,8 +150,8 @@ const Integration = () => {
               onClick={handleCopy}
               disabled={isLoading || !!error || apiKey.startsWith('Loading') || apiKey.includes('ERROR') || apiKey.includes('Not Found')} // UPDATED: Disable logic
               className={`flex items-center px-4 py-3 border border-transparent text-sm font-medium rounded-r-lg shadow-sm transition duration-150 focus:outline-none focus:ring-2 focus:ring-offset-2 ${isCopied
-                  ? 'bg-green-500 text-white hover:bg-green-600 focus:ring-green-500'
-                  : 'bg-primary-600 text-white hover:bg-primary-700 focus:ring-primary-500'
+                ? 'bg-green-500 text-white hover:bg-green-600 focus:ring-green-500'
+                : 'bg-primary-600 text-white hover:bg-primary-700 focus:ring-primary-500'
                 } disabled:bg-gray-400 disabled:cursor-not-allowed`}
             >
               {isCopied ? <Check className="h-5 w-5 mr-1" /> : <Copy className="h-5 w-5 mr-1" />}

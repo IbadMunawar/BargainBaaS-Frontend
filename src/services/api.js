@@ -1,6 +1,6 @@
 // Base URL for the Backend API. This must match the URL provided by your teammate.
-// Base URL: https://web-production-d88ec.up.railway.app
-const API_BASE_URL = 'https://web-production-04173.up.railway.app/api/v1/tenant';
+// Base URL: https://ina-backend-fyp.onrender.com
+const API_BASE_URL = 'https://ina-backend-fyp.onrender.com/api/v1/tenant';
 
 /**
  * Retrieves the JWT from local storage.

@@ -24,7 +24,7 @@ const SignUpPage: React.FC = () => {
 
     try {
       // Note: The backend register endpoint may only require email and password
-      const response = await fetch('https://web-production-04173.up.railway.app/api/auth/register', {
+      const response = await fetch('https://ina-backend-fyp.onrender.com/api/auth/register', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

@@ -1,23 +1,23 @@
-import React from 'react'; 
+import React from 'react';
 import DashboardLayout from '../../components/layout/DashboardLayout';
 import { Info, Link as LinkIcon, ArrowRight } from 'lucide-react';
 import Link from 'next/link';
 
 const Configuration: React.FC = () => {
-    
+
     // In the new "Push Model," configuration is done via a single API call 
     // before the chat starts, not via the dashboard form.
-    
+
     return (
         <DashboardLayout pageTitle="Policy Engine Configuration">
             <div className="max-w-4xl mx-auto space-y-6">
-                
+
                 {/* Information Card for the Push Model */}
                 <div className="flex items-start p-6 mb-6 bg-primary-50 border-l-4 border-primary-500 rounded-lg shadow-md">
                     <Info className="h-6 w-6 mt-0.5 text-primary-600 flex-shrink-0" />
                     <div className="ml-4 text-sm text-gray-800">
                         <h3 className="text-lg font-semibold text-primary-900">
-                            Action Required: The New "Push" Model
+                            Action Required: The New Push Model
                         </h3>
                         <p className="mt-2">
                             To ensure high performance and security, BargainBaaS now uses a **Push Model** architecture. You no longer save a permanent endpoint URL here.
