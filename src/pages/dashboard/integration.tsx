@@ -1,20 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import DashboardLayout from '../../components/layout/DashboardLayout';
-import { Key, Copy, Check, AlertTriangle, Zap } from 'lucide-react';
+import { Key, Copy, Check, AlertTriangle, Zap, Hash, Globe } from 'lucide-react';
 import { authFetch } from '../../services/api';
 
 const Integration = () => {
-  // REPLACED mock data with live state
-  const [apiKey, setApiKey] = useState('Loading API Key...'); // Initial message while loading
-  const [tenantId, setTenantId] = useState('Loading Tenant ID...'); // ADDED: State for Tenant ID
+  const [apiKey, setApiKey] = useState('');
+  const [tenantId, setTenantId] = useState('');
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [isCopied, setIsCopied] = useState(false);
+  const [isTenantIdCopied, setIsTenantIdCopied] = useState(false);
 
-  // ADDED: The fixed URL for the new Push Endpoint (assumes API Base URL is known)
   const SESSION_INIT_ENDPOINT = 'https://ina-backend-fyp.onrender.com/api/v1/session/init';
 
-  // Helper: decode a JWT and return its payload (no signature verification — display only)
   const decodeJwt = (token: string): Record<string, any> | null => {
     try {
       const payloadBase64 = token.split('.')[1];
@@ -25,187 +23,200 @@ const Integration = () => {
     }
   };
 
-  // NEW CODE: useEffect hook to load the API Key and Tenant ID
   useEffect(() => {
     const loadApiKey = async () => {
       setIsLoading(true);
       setError(null);
-
       try {
-        // Use the same GET endpoint as the Configuration page
         const response = await authFetch('/configuration');
         const data = await response.json();
 
-        if (data.client_api_key) {
-          setApiKey(data.client_api_key);
-        } else {
-          setApiKey('API Key Not Found');
-        }
+        setApiKey(data.client_api_key || '');
 
-        // Prefer tenant_id from API response; fall back to decoding it from the JWT
         if (data.tenant_id) {
           setTenantId(data.tenant_id);
         } else {
           const token = localStorage.getItem('jwt_token');
           const payload = token ? decodeJwt(token) : null;
-          // JWTs commonly use 'tenant_id', 'sub', or 'user_id' — check all
           const idFromToken = payload?.tenant_id || payload?.sub || payload?.user_id || null;
-          setTenantId(idFromToken ?? 'Tenant ID not available');
+          setTenantId(idFromToken ?? '');
         }
       } catch (err) {
-        console.error('Failed to load API Key:', err);
-        const errorMessage = (err && typeof err === 'object' && 'message' in err) ? (err as Error).message : 'Failed to connect to the API server.';
+        const errorMessage =
+          err && typeof err === 'object' && 'message' in err
+            ? (err as Error).message
+            : 'Failed to connect to the API server.';
         setError(errorMessage as string);
-        setApiKey('ERROR LOADING KEY');
-        setTenantId('ERROR LOADING ID');
       } finally {
         setIsLoading(false);
       }
     };
-
     loadApiKey();
-  }, []); // Runs only once on mount
+  }, []);
 
-  // Implement the "Copy to Clipboard" logic
-  const handleCopy = () => {
-    // navigator.clipboard.writeText is the standard, modern way.
+  const copyToClipboard = (text: string, setCallback: (v: boolean) => void) => {
     if (navigator.clipboard && window.isSecureContext) {
-      navigator.clipboard.writeText(apiKey).then(() => {
-        setIsCopied(true);
-        // Reset the checkmark after 2 seconds
-        setTimeout(() => setIsCopied(false), 2000);
-      }).catch(err => {
-        console.error('Failed to copy text: ', err);
-        // Fallback for older browsers or restricted environments (like iframes)
-        fallbackCopyTextToClipboard(apiKey);
+      navigator.clipboard.writeText(text).then(() => {
+        setCallback(true);
+        setTimeout(() => setCallback(false), 2000);
       });
     } else {
-      // Fallback
-      fallbackCopyTextToClipboard(apiKey);
+      const el = document.createElement('textarea');
+      el.value = text;
+      el.style.position = 'fixed';
+      document.body.appendChild(el);
+      el.focus();
+      el.select();
+      document.execCommand('copy');
+      document.body.removeChild(el);
+      setCallback(true);
+      setTimeout(() => setCallback(false), 2000);
     }
   };
 
-  // Fallback function for copying text using document.execCommand
-  const fallbackCopyTextToClipboard = (text: string) => {
-    const textArea = document.createElement("textarea");
-    textArea.value = text;
-    // Avoid scrolling to bottom
-    textArea.style.top = "0";
-    textArea.style.left = "0";
-    textArea.style.position = "fixed";
-
-    document.body.appendChild(textArea);
-    textArea.focus();
-    textArea.select();
-
-    try {
-      const successful = document.execCommand('copy');
-      if (successful) {
-        setIsCopied(true);
-        setTimeout(() => setIsCopied(false), 2000);
-      } else {
-        console.error('Fallback: Copying text command failed');
-      }
-    } catch (err) {
-      // CHANGED: Safely handle 'unknown' error type
-      const errorMessage = (err && typeof err === 'object' && 'message' in err) ? (err as Error).message : 'Unknown error during copy fallback.';
-      console.error('Fallback: Oops, unable to copy', errorMessage);
-    }
-
-    document.body.removeChild(textArea);
-  };
+  const isKeyReady = !isLoading && !error && apiKey.length > 0;
 
   return (
     <DashboardLayout pageTitle="API Integration & Keys">
-      <div className="max-w-4xl mx-auto">
+      <div className="max-w-4xl mx-auto space-y-6">
 
-        {/* NEW CODE: Error Status Message */}
+        {/* Error Banner */}
         {error && (
-          <div className="p-4 mb-6 text-sm font-medium text-red-800 bg-red-100 border border-red-200 rounded-lg flex items-center" role="alert">
-            <AlertTriangle className="h-5 w-5 mr-2 flex-shrink-0" />
+          <div className="flex items-center gap-3 p-4 rounded-xl bg-red-500/10 border border-red-500/20 text-red-400 text-sm">
+            <AlertTriangle className="h-4 w-4 flex-shrink-0" />
             {error}
           </div>
         )}
-        {/* End Error Status Message */}
 
-        {/* NEW CODE: Tenant ID Card (Required for Push Model authentication) */}
-        <div className="bg-white p-6 rounded-xl shadow-lg border border-gray-100 mb-6">
-          <h2 className="text-xl font-semibold text-gray-800 mb-4">
-            Your Tenant ID
-          </h2>
-          <input
-            type="text"
-            readOnly
-            value={tenantId}
-            className="w-full px-4 py-3 text-gray-800 bg-gray-50 border border-gray-300 rounded-lg font-mono text-sm shadow-inner select-all overflow-hidden whitespace-nowrap overflow-ellipsis"
-            aria-label="Tenant ID"
-            disabled={isLoading || !!error}
-          />
-          <p className="mt-2 text-sm text-gray-600">
-            This unique ID is used by the Orchestrator internally. It must be provided in the body of the Session Init call.
-          </p>
-        </div>
-        {/* End Tenant ID Card */}
+        {/* Tenant ID Card */}
+        <div className="p-6 rounded-2xl border border-white/10 bg-white/5 backdrop-blur-sm">
+          <div className="flex items-center gap-3 mb-4">
+            <div className="p-2 rounded-lg bg-blue-500/10 border border-blue-500/20">
+              <Hash className="h-4 w-4 text-blue-400" />
+            </div>
+            <div>
+              <h2 className="text-base font-semibold text-white">Your Tenant ID</h2>
+              <p className="text-xs text-slate-500">Required in the session init request body</p>
+            </div>
+          </div>
 
-        {/* API Key Card */}
-        <div className="bg-white p-6 rounded-xl shadow-lg border border-gray-100 mb-6">
-          <h2 className="text-xl font-semibold text-gray-800 mb-4 flex items-center">
-            <Key className="h-5 w-5 mr-2 text-primary-600" />
-            Your Tenant API Key
-          </h2>
-
-          <div className="flex items-center space-x-2">
+          <div className="flex items-center gap-2">
             <input
               type="text"
               readOnly
-              value={apiKey} // NOW USES LIVE STATE
-              className="flex-grow px-4 py-3 text-gray-800 bg-gray-50 border border-gray-300 rounded-l-lg font-mono text-sm shadow-inner select-all overflow-hidden whitespace-nowrap overflow-ellipsis"
-              aria-label="Tenant API Key"
-              disabled={isLoading || !!error} // UPDATED: Disable when loading or error
+              value={isLoading ? 'Loading…' : tenantId || 'Not available'}
+              className="flex-1 px-4 py-3 bg-slate-900/60 border border-white/10 rounded-xl text-slate-300 font-mono text-sm focus:outline-none select-all"
+              aria-label="Tenant ID"
             />
             <button
-              onClick={handleCopy}
-              disabled={isLoading || !!error || apiKey.startsWith('Loading') || apiKey.includes('ERROR') || apiKey.includes('Not Found')} // UPDATED: Disable logic
-              className={`flex items-center px-4 py-3 border border-transparent text-sm font-medium rounded-r-lg shadow-sm transition duration-150 focus:outline-none focus:ring-2 focus:ring-offset-2 ${isCopied
-                ? 'bg-green-500 text-white hover:bg-green-600 focus:ring-green-500'
-                : 'bg-primary-600 text-white hover:bg-primary-700 focus:ring-primary-500'
-                } disabled:bg-gray-400 disabled:cursor-not-allowed`}
+              onClick={() => copyToClipboard(tenantId, setIsTenantIdCopied)}
+              disabled={!tenantId}
+              className="flex items-center gap-2 px-4 py-3 rounded-xl text-sm font-medium bg-blue-600/20 border border-blue-500/30 text-blue-400 hover:bg-blue-600/30 transition disabled:opacity-40 disabled:cursor-not-allowed"
             >
-              {isCopied ? <Check className="h-5 w-5 mr-1" /> : <Copy className="h-5 w-5 mr-1" />}
-              {isCopied ? 'Copied!' : 'Copy to Clipboard'}
+              {isTenantIdCopied ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
+              {isTenantIdCopied ? 'Copied' : 'Copy'}
+            </button>
+          </div>
+        </div>
+
+        {/* API Key Card — Glowing border */}
+        <div
+          className="relative p-6 rounded-2xl border bg-white/5 backdrop-blur-sm overflow-hidden"
+          style={{
+            borderColor: 'rgba(139, 92, 246, 0.4)',
+            boxShadow: '0 0 40px -12px rgba(139,92,246,0.4), inset 0 0 40px -24px rgba(139,92,246,0.08)',
+          }}
+        >
+          {/* Glow pulse behind card */}
+          <div className="absolute -top-12 -right-12 w-40 h-40 bg-violet-600/15 rounded-full blur-3xl pointer-events-none" />
+
+          <div className="relative flex items-center gap-3 mb-4">
+            <div className="p-2 rounded-lg bg-violet-500/10 border border-violet-500/30">
+              <Key className="h-4 w-4 text-violet-400" />
+            </div>
+            <div>
+              <h2 className="text-base font-semibold text-white">Your Tenant API Key</h2>
+              <p className="text-xs text-slate-500">Use this in the <code className="text-violet-400">Authorization: Bearer</code> header for all INA API calls</p>
+            </div>
+          </div>
+
+          <div className="relative flex items-center gap-2">
+            <input
+              type="text"
+              readOnly
+              value={isLoading ? 'Loading API Key…' : apiKey || 'Key not found'}
+              className="flex-1 px-4 py-3 bg-slate-900/60 border border-violet-500/20 rounded-xl text-slate-300 font-mono text-sm focus:outline-none select-all"
+              aria-label="Tenant API Key"
+            />
+            <button
+              onClick={() => copyToClipboard(apiKey, setIsCopied)}
+              disabled={!isKeyReady}
+              className={`flex items-center gap-2 px-4 py-3 rounded-xl text-sm font-medium border transition disabled:opacity-40 disabled:cursor-not-allowed ${
+                isCopied
+                  ? 'bg-emerald-500/20 border-emerald-500/30 text-emerald-400'
+                  : 'bg-violet-600/20 border-violet-500/30 text-violet-400 hover:bg-violet-600/30'
+              }`}
+            >
+              {isCopied ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
+              {isCopied ? 'Copied!' : 'Copy'}
             </button>
           </div>
 
-          <p className="mt-4 text-sm text-gray-600">
-            Use this key to authorize all server-to-server calls to your external Policy Engine (the URL you configured on the Configuration page).
+          <div className="relative mt-4 p-3 rounded-xl bg-amber-500/5 border border-amber-500/20">
+            <p className="text-xs text-amber-400/80 flex items-start gap-2">
+              <AlertTriangle className="h-3.5 w-3.5 mt-0.5 flex-shrink-0" />
+              Never expose this key in client-side code. All calls using this key must originate from your secure backend server.
+            </p>
+          </div>
+        </div>
+
+        {/* Session Init Endpoint Card */}
+        <div className="p-6 rounded-2xl border border-white/10 bg-white/5 backdrop-blur-sm">
+          <div className="flex items-center gap-3 mb-4">
+            <div className="p-2 rounded-lg bg-emerald-500/10 border border-emerald-500/20">
+              <Globe className="h-4 w-4 text-emerald-400" />
+            </div>
+            <div>
+              <h2 className="text-base font-semibold text-white">Session Initialization Endpoint</h2>
+              <p className="text-xs text-slate-500">Your backend must call this before rendering the chat widget</p>
+            </div>
+          </div>
+
+          <div className="flex items-center gap-2 mb-3">
+            <span className="px-2 py-1 text-xs font-bold bg-blue-500/20 border border-blue-500/30 text-blue-400 rounded-md font-mono">
+              POST
+            </span>
+            <input
+              type="text"
+              readOnly
+              value={SESSION_INIT_ENDPOINT}
+              className="flex-1 px-4 py-3 bg-slate-900/60 border border-white/10 rounded-xl text-slate-300 font-mono text-sm focus:outline-none select-all"
+              aria-label="Session Init Endpoint"
+            />
+          </div>
+
+          <p className="text-xs text-slate-500">
+            Send <code className="text-slate-300">api_key</code>, <code className="text-slate-300">tenant_id</code>, <code className="text-slate-300">mam</code>, and <code className="text-slate-300">asking_price</code> in the JSON body. The returned <code className="text-slate-300">session_id</code> is passed to the chat widget.
           </p>
         </div>
 
-        {/* NEW CODE: Session Initialization Endpoint Card */}
-        <div className="bg-white p-6 rounded-xl shadow-lg border border-gray-100 mb-6">
-          <h2 className="text-xl font-semibold text-gray-800 mb-4">
-            Session Initialization Endpoint
-          </h2>
-          <input
-            type="text"
-            readOnly
-            value={SESSION_INIT_ENDPOINT}
-            className="w-full px-4 py-3 text-gray-800 bg-gray-50 border border-gray-300 rounded-lg font-mono text-sm shadow-inner select-all overflow-hidden whitespace-nowrap overflow-ellipsis"
-            aria-label="Session Init Endpoint"
-          />
-          <p className="mt-2 text-sm text-gray-600">
-            This is the endpoint your backend must call *before* starting a chat with rules (MAM, Asking Price) in the request body.
-          </p>
-        </div>
-        {/* End Session Initialization Endpoint Card */}
-
-        {/* Quickstart/Setup Guide Card */}
-        <div className="flex items-start p-4 bg-yellow-50 border border-yellow-200 rounded-lg shadow-sm">
-          <Zap className="h-5 w-5 mt-0.5 text-yellow-600 flex-shrink-0" />
-          <div className="ml-3 text-sm text-yellow-800">
-            <h3 className="font-semibold text-yellow-900">Next Steps: Setup</h3>
-            <p>
-              Before deploying, ensure your external Policy Engine is configured to accept requests from BargainBaaS and validates this API key in the <code>Authorization: Bearer [KEY]</code> header.
+        {/* Next Steps */}
+        <div className="flex items-start gap-4 p-5 rounded-2xl border border-violet-500/20 bg-violet-500/5">
+          <div className="p-2 rounded-lg bg-violet-500/10 border border-violet-500/20 mt-0.5">
+            <Zap className="h-4 w-4 text-violet-400" />
+          </div>
+          <div className="text-sm">
+            <h3 className="font-semibold text-white mb-1">Next Steps: Integration Guide</h3>
+            <p className="text-slate-400">
+              Read the{' '}
+              <a href="/dashboard/documentation/session-init" className="text-violet-400 underline hover:text-violet-300 transition">
+                Session Initialization
+              </a>{' '}
+              and{' '}
+              <a href="/dashboard/documentation/success-protocol" className="text-violet-400 underline hover:text-violet-300 transition">
+                Success Protocol
+              </a>{' '}
+              documentation to complete your server-to-server integration.
             </p>
           </div>
         </div>
