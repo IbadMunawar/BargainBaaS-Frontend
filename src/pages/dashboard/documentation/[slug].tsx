@@ -113,7 +113,7 @@ const DOCS_CONTENT: Record<string, { title: string; content: React.ReactNode }> 
                     </StepRow>
                     <StepRow step="2" label="Initialize the session (server-side)">
                         Before rendering the chat widget, your backend calls <code className="text-slate-300 bg-slate-800 px-1.5 py-0.5 rounded">POST /api/v1/session/init</code>{' '}
-                        with the product's negotiation rules. The returned <code className="text-slate-300 bg-slate-800 px-1.5 py-0.5 rounded">session_id</code> is forwarded to your frontend.
+                        with the product&apos;s negotiation rules. The returned <code className="text-slate-300 bg-slate-800 px-1.5 py-0.5 rounded">session_id</code> is forwarded to your frontend.
                     </StepRow>
                     <StepRow step="3" label="Embed the chat widget">
                         Pass the <code className="text-slate-300 bg-slate-800 px-1.5 py-0.5 rounded">session_id</code> to the BargainBaaS widget on your product page. The widget is the only client-side component.
@@ -177,7 +177,7 @@ const DOCS_CONTENT: Record<string, { title: string; content: React.ReactNode }> 
             <div className="space-y-5">
                 <ProseText>
                     Before the chat widget is rendered, your backend must initialize a negotiation session.
-                    This call securely loads the product's negotiation rules (MAM and asking price) into
+                    This call securely loads the product&apos;s negotiation rules (MAM and asking price) into
                     our Redis cache, so the LangGraph agent can enforce them in real time — with zero
                     client-side latency.
                 </ProseText>
@@ -269,7 +269,7 @@ Content-Type: application/json`}</CodeBlock>
                 <SectionTitle>The 4-Step Verification Flow</SectionTitle>
                 <ol className="space-y-0">
                     <StepRow step="A" label="Widget signals deal complete">
-                        The chat widget's negotiation graph reaches a terminal node. The widget emits
+                        The chat widget&apos;s negotiation graph reaches a terminal node. The widget emits
                         an event (or sets UI state) indicating a deal has been reached and exposes the
                         active <code className="text-slate-300 bg-slate-800 px-1.5 py-0.5 rounded text-xs">session_id</code>.
                     </StepRow>
@@ -298,7 +298,7 @@ Authorization: Bearer <YOUR_TENANT_API_KEY>`}</CodeBlock>
 
                 <ol className="space-y-0 mt-2">
                     <StepRow step="D" label="Backend adds item to cart">
-                        If <code className="text-slate-300 bg-slate-800 px-1.5 py-0.5 rounded text-xs">negotiation_status === "deal_accepted"</code>,
+                        If <code className="text-slate-300 bg-slate-800 px-1.5 py-0.5 rounded text-xs">negotiation_status === &quot;deal_accepted&quot;</code>,
                         your backend updates the product price to{' '}
                         <code className="text-slate-300 bg-slate-800 px-1.5 py-0.5 rounded text-xs">final_price</code> in
                         your cart or order system and returns a success response to the frontend.
@@ -342,7 +342,7 @@ Authorization: Bearer <YOUR_TENANT_API_KEY>`}</CodeBlock>
                 <ProseText>
                     Place the snippet below on your product page. Substitute{' '}
                     <code className="text-slate-300 bg-slate-800 px-1.5 py-0.5 rounded text-xs">SESSION_ID</code> with
-                    the value returned from your backend's session init call.
+                    the value returned from your backend&apos;s session init call.
                 </ProseText>
                 <CodeBlock language="html">{`<!-- Place this where you want the chat button to appear -->
 <div
