@@ -193,7 +193,7 @@ const MockChatWidget: React.FC = () => (
           className="rounded-2xl rounded-bl-none px-3.5 py-2.5 text-sm text-slate-200 max-w-[75%]"
           style={{ background: 'rgba(99,102,241,0.15)', border: '1px solid rgba(99,102,241,0.2)' }}
         >
-          Hi! I'm here to negotiate the best deal for you. What's your offer for these headphones?
+          Hi! I&apos;m here to negotiate the best deal for you. What&apos;s your offer for these headphones?
         </div>
       </div>
 
@@ -219,7 +219,7 @@ const MockChatWidget: React.FC = () => (
           className="rounded-2xl rounded-bl-none px-3.5 py-2.5 text-sm text-slate-200 max-w-[80%]"
           style={{ background: 'rgba(99,102,241,0.15)', border: '1px solid rgba(99,102,241,0.2)' }}
         >
-          That's a stretch! I can do <strong className="text-blue-300">$318</strong> — still $31 off. Deal?
+          That&apos;s a stretch! I can do <strong className="text-blue-300">$318</strong> — still $31 off. Deal?
         </div>
       </div>
 

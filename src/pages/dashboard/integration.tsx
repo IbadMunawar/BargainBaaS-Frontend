@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import Link from 'next/link';
 import DashboardLayout from '../../components/layout/DashboardLayout';
 import { Key, Copy, Check, AlertTriangle, Zap, Hash, Globe } from 'lucide-react';
 import { authFetch } from '../../services/api';
@@ -209,13 +210,13 @@ const Integration = () => {
             <h3 className="font-semibold text-white mb-1">Next Steps: Integration Guide</h3>
             <p className="text-slate-400">
               Read the{' '}
-              <a href="/dashboard/documentation/session-init" className="text-violet-400 underline hover:text-violet-300 transition">
+              <Link href="/dashboard/documentation/session-init" className="text-violet-400 underline hover:text-violet-300 transition">
                 Session Initialization
-              </a>{' '}
+              </Link>{' '}
               and{' '}
-              <a href="/dashboard/documentation/success-protocol" className="text-violet-400 underline hover:text-violet-300 transition">
+              <Link href="/dashboard/documentation/success-protocol" className="text-violet-400 underline hover:text-violet-300 transition">
                 Success Protocol
-              </a>{' '}
+              </Link>{' '}
               documentation to complete your server-to-server integration.
             </p>
           </div>

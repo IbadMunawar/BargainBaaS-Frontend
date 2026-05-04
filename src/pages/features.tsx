@@ -293,8 +293,8 @@ const PillarTwoSection: React.FC = () => (
           description="Sellers define a secret Minimum Acceptable Margin (MAM) per product. The AI orchestrator is hardcoded to fiercely protect this baseline — guaranteeing profitability on every deal that gets locked."
           bullets={[
             'MAM is stored server-side — never exposed to the negotiating user.',
-            "Every AI counter-offer is validated against the seller's MAM before sending.",
-            '"Take-it-or-leave-it" state triggers automatically when floor is reached.',
+            "Every AI counter-offer is validated against the seller&apos;s MAM before sending.",
+            '&ldquo;Take-it-or-leave-it&rdquo; state triggers automatically when floor is reached.',
           ]}
           hoverBorder="rgba(167,139,250,0.5)"
           hoverGlow="rgba(167,139,250,0.12)"
