@@ -77,7 +77,8 @@ const DomainsDashboard = () => {
     } else {
       fetchDomains();
     }
-  }, []);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [fetchDomains]);
 
   // Listen to input changes for wildcard asterisk
   const handleDomainChange = (val: string) => {

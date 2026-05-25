@@ -64,8 +64,8 @@ const LoginPage: React.FC = () => {
         err instanceof Error
           ? err.message
           : typeof err === 'string'
-          ? err
-          : 'An unexpected network error occurred. Check your connection.';
+            ? err
+            : 'An unexpected network error occurred. Check your connection.';
       setError(errorString);
       console.error('Login Error:', err);
     } finally {

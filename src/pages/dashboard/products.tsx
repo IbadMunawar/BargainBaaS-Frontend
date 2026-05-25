@@ -106,7 +106,8 @@ const ProductsDashboard = () => {
     } else {
       fetchProducts();
     }
-  }, []);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [fetchProducts]);
 
   // CSV Template download content (Data URI)
   const getCsvTemplateUri = () => {

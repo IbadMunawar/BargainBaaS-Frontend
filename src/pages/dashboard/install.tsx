@@ -226,7 +226,7 @@ function verifyNegotiatedPrice(sessionId, askingPrice, finalPrice, signature, cl
                 </p>
                 <ol className="list-decimal list-inside text-xs text-slate-400 space-y-2">
                   <li>Copy the loader code block from Section A.</li>
-                  <li>Paste the script snippet before the closing <code className="text-slate-300 font-mono">&lt;/body&gt;</code> tag of your global document layout template.</li>
+                  <li>Paste the script snippet before the closing <code className="text-slate-300 font-mono">{"</body>"}</code> tag of your global document layout template.</li>
                   <li>
                     Identify products dynamically by setting the <code className="text-violet-400 font-mono">data-ina-product</code> attribute dynamically on target product details templates (e.g. <code className="text-slate-300 font-mono">data-ina-product="SKU-2415"</code>).
                   </li>
@@ -244,11 +244,11 @@ function verifyNegotiatedPrice(sessionId, askingPrice, finalPrice, signature, cl
                   Inject the bargaining agent directly into your Liquid themes code editor:
                 </p>
                 <ol className="list-decimal list-inside text-xs text-slate-400 space-y-2">
-                  <li>Navigate to your Shopify Dashboard, and select **Online Store** -> **Themes**.</li>
+                  <li>Navigate to your Shopify Dashboard, and select **Online Store** &rarr; **Themes**.</li>
                   <li>Click the **three dots** (Actions) on your live theme, and click **Edit Code**.</li>
                   <li>Open the layout file: <code className="text-slate-300 font-mono">layout/theme.liquid</code>.</li>
                   <li>
-                    Scroll to the bottom of the file, and paste the code block snippet right before the closing Liquid markup tag <code className="text-slate-300 font-mono">&lt;/body&gt;</code>.
+                    Scroll to the bottom of the file, and paste the code block snippet right before the closing Liquid markup tag <code className="text-slate-300 font-mono">{"</body>"}</code>.
                   </li>
                   <li>
                     Configure dynamic products by modifying the product variable field:
