@@ -11,7 +11,6 @@ import {
   FileCode, 
   ShoppingBag, 
   Cpu, 
-  Html5,
   ExternalLink,
   Loader2,
   AlertTriangle
