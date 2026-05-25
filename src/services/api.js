@@ -27,19 +27,33 @@ export const authFetch = async (endpoint, method = 'GET', data = null) => {
         throw new Error('Unauthorized: Please log in again.');
     }
 
-    const url = `${API_BASE_URL}${endpoint}`;
+    let url;
+    if (endpoint.startsWith('http')) {
+        url = endpoint;
+    } else if (endpoint.startsWith('/api/')) {
+        url = `https://ina-backend-fyp.onrender.com${endpoint}`;
+    } else if (endpoint === '/analytics/summary') {
+        url = `https://ina-backend-fyp.onrender.com/api/v1/analytics/`;
+    } else {
+        url = `${API_BASE_URL}${endpoint}`;
+    }
+
+    const isFormData = typeof FormData !== 'undefined' && data instanceof FormData;
 
     const headers = {
-        'Content-Type': 'application/json',
         'Authorization': `Bearer ${token}`,
     };
+
+    if (!isFormData) {
+        headers['Content-Type'] = 'application/json';
+    }
 
     const config = {
         method: method.toUpperCase(),
         headers: headers,
         // Using body directly here, outside the catch block
         body: (data && method.toUpperCase() !== 'GET' && method.toUpperCase() !== 'HEAD')
-            ? JSON.stringify(data)
+            ? (isFormData ? data : JSON.stringify(data))
             : undefined,
     };
 

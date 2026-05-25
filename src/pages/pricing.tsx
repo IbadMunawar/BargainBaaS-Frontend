@@ -240,18 +240,18 @@ const PricingCard: React.FC<{ plan: Plan }> = ({ plan }) => {
 
   const cardStyle: React.CSSProperties = plan.primary
     ? {
-        background: 'rgba(99,102,241,0.08)',
-        border: '1px solid rgba(167,139,250,0.45)',
-        backdropFilter: 'blur(20px)',
-        WebkitBackdropFilter: 'blur(20px)',
-        boxShadow: '0 0 40px rgba(99,102,241,0.2), 0 0 0 1px rgba(167,139,250,0.15)',
-      }
+      background: 'rgba(99,102,241,0.08)',
+      border: '1px solid rgba(167,139,250,0.45)',
+      backdropFilter: 'blur(20px)',
+      WebkitBackdropFilter: 'blur(20px)',
+      boxShadow: '0 0 40px rgba(99,102,241,0.2), 0 0 0 1px rgba(167,139,250,0.15)',
+    }
     : {
-        background: 'rgba(255,255,255,0.03)',
-        border: '1px solid rgba(255,255,255,0.08)',
-        backdropFilter: 'blur(16px)',
-        WebkitBackdropFilter: 'blur(16px)',
-      };
+      background: 'rgba(255,255,255,0.03)',
+      border: '1px solid rgba(255,255,255,0.08)',
+      backdropFilter: 'blur(16px)',
+      WebkitBackdropFilter: 'blur(16px)',
+    };
 
   return (
     <div
@@ -331,9 +331,8 @@ const PricingCard: React.FC<{ plan: Plan }> = ({ plan }) => {
               <X className="h-4 w-4 text-slate-700 flex-shrink-0 mt-0.5" />
             )}
             <span
-              className={`text-sm leading-relaxed ${
-                f.included ? 'text-slate-300' : 'text-slate-600 line-through'
-              }`}
+              className={`text-sm leading-relaxed ${f.included ? 'text-slate-300' : 'text-slate-600 line-through'
+                }`}
             >
               {f.text}
             </span>
@@ -348,15 +347,15 @@ const PricingCard: React.FC<{ plan: Plan }> = ({ plan }) => {
         style={
           plan.primary
             ? {
-                background: 'linear-gradient(135deg, #6366f1, #a78bfa)',
-                boxShadow: '0 0 24px rgba(99,102,241,0.45)',
-                color: '#fff',
-              }
+              background: 'linear-gradient(135deg, #6366f1, #a78bfa)',
+              boxShadow: '0 0 24px rgba(99,102,241,0.45)',
+              color: '#fff',
+            }
             : {
-                background: 'rgba(255,255,255,0.05)',
-                border: `1px solid ${plan.accentColor}44`,
-                color: plan.accentColor,
-              }
+              background: 'rgba(255,255,255,0.05)',
+              border: `1px solid ${plan.accentColor}44`,
+              color: plan.accentColor,
+            }
         }
         onMouseEnter={(e) => {
           if (plan.primary) {
