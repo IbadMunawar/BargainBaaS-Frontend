@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import DashboardLayout from '../../components/layout/DashboardLayout';
 import { authFetch } from '../../services/api';
 import {
@@ -83,7 +83,7 @@ const ProductsDashboard = () => {
   });
 
   // Fetch products catalog
-  const fetchProducts = async () => {
+  const fetchProducts = useCallback(async () => {
     setIsLoading(true);
     setError(null);
     try {
@@ -96,7 +96,7 @@ const ProductsDashboard = () => {
     } finally {
       setIsLoading(false);
     }
-  };
+  }, []);
 
   // On mount check auth & fetch
   useEffect(() => {
@@ -106,7 +106,6 @@ const ProductsDashboard = () => {
     } else {
       fetchProducts();
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [fetchProducts]);
 
   // CSV Template download content (Data URI)

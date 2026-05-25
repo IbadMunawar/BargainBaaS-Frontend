@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import DashboardLayout from '../../components/layout/DashboardLayout';
 import { authFetch } from '../../services/api';
 import {
@@ -53,7 +53,7 @@ const DomainsDashboard = () => {
   };
 
   // Fetch whitelisted origin domains
-  const fetchDomains = async () => {
+  const fetchDomains = useCallback(async () => {
     setIsLoading(true);
     setApiError(null);
     try {
@@ -67,7 +67,7 @@ const DomainsDashboard = () => {
     } finally {
       setIsLoading(false);
     }
-  };
+  }, []);
 
   // Auth check & load data on mount
   useEffect(() => {
@@ -77,7 +77,6 @@ const DomainsDashboard = () => {
     } else {
       fetchDomains();
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [fetchDomains]);
 
   // Listen to input changes for wildcard asterisk

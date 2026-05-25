@@ -228,7 +228,7 @@ function verifyNegotiatedPrice(sessionId, askingPrice, finalPrice, signature, cl
                   <li>Copy the loader code block from Section A.</li>
                   <li>Paste the script snippet before the closing <code className="text-slate-300 font-mono">{"</body>"}</code> tag of your global document layout template.</li>
                   <li>
-                    Identify products dynamically by setting the <code className="text-violet-400 font-mono">data-ina-product</code> attribute dynamically on target product details templates (e.g. <code className="text-slate-300 font-mono">data-ina-product="SKU-2415"</code>).
+                    Identify products dynamically by setting the <code className="text-violet-400 font-mono">data-ina-product</code> attribute dynamically on target product details templates (e.g. <code className="text-slate-300 font-mono">{"data-ina-product=\"SKU-2415\""}</code>).
                   </li>
                   <li>Deploy your storefront changes. The widget will automatically load and attach to eligible products.</li>
                 </ol>
