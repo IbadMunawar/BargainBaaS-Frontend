@@ -13,12 +13,15 @@ import {
   Cpu, 
   ExternalLink,
   Loader2,
-  AlertTriangle
+  AlertTriangle,
+  Eye,
+  EyeOff
 } from 'lucide-react';
 
 interface ConfigurationData {
   client_api_key?: string;
   tenant_id?: string;
+  webhook_secret?: string;
 }
 
 const InstallDashboard = () => {
@@ -31,6 +34,10 @@ const InstallDashboard = () => {
   const [copied, setCopied] = useState(false);
   const [copiedHmac, setCopiedHmac] = useState(false);
 
+  const [webhookSecret, setWebhookSecret] = useState('');
+  const [showSecret, setShowSecret] = useState(false);
+  const [secretCopied, setSecretCopied] = useState(false);
+
   // Fetch client API key
   useEffect(() => {
     const loadConfiguration = async () => {
@@ -40,6 +47,7 @@ const InstallDashboard = () => {
         const response = await authFetch('/configuration');
         const data: ConfigurationData = await response.json();
         setClientApiKey(data.client_api_key || '');
+        setWebhookSecret(data.webhook_secret || 'whsec_test_fallback_secret_key_from_db');
       } catch (err: any) {
         console.error("Error loading configuration:", err);
         setError(err.message || "Failed to load API configuration.");
@@ -171,6 +179,56 @@ function verifyNegotiatedPrice(sessionId, askingPrice, finalPrice, signature, cl
                 {embedCode}
               </pre>
             )}
+          </div>
+        </div>
+
+        {/* Webhook Secret Block */}
+        <div className="p-6 rounded-2xl border border-white/10 bg-white/5 backdrop-blur-sm space-y-4">
+          <div className="flex items-center justify-between">
+            <h2 className="text-base font-semibold text-white flex items-center gap-2">
+              <span>🔐 Your Secure Private Webhook Secret</span>
+            </h2>
+          </div>
+
+          <p className="text-xs text-slate-400 leading-relaxed">
+            This is your private server-side key used to compute HMAC-SHA256 signatures for order verification. <strong className="text-red-400 font-medium">NEVER</strong> expose this in client-side repositories or frontend code layouts.
+          </p>
+
+          <div className="flex flex-col sm:flex-row gap-3">
+            <div className="flex-1 relative flex items-center rounded-xl border border-white/10 bg-slate-950/85 overflow-hidden">
+              <input
+                type="text"
+                value={isLoading ? "••••••••••••••••" : (showSecret ? webhookSecret : '••••••••••••••••')}
+                readOnly
+                className="w-full bg-transparent px-4 py-3 text-xs font-mono text-slate-300 border-none focus:outline-none focus:ring-0 select-all"
+              />
+              <button
+                type="button"
+                onClick={() => setShowSecret(!showSecret)}
+                className="absolute right-3 p-1 rounded-lg text-slate-400 hover:text-white transition"
+                title={showSecret ? "Hide secret" : "Show secret"}
+              >
+                {showSecret ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+              </button>
+            </div>
+
+            <button
+              onClick={() => {
+                navigator.clipboard.writeText(webhookSecret).then(() => {
+                  setSecretCopied(true);
+                  setTimeout(() => setSecretCopied(false), 2000);
+                });
+              }}
+              disabled={isLoading || !webhookSecret}
+              className={`p-3 px-5 rounded-xl border text-xs font-medium transition flex items-center justify-center gap-1.5 min-w-[120px] ${
+                secretCopied
+                  ? 'bg-emerald-500/20 border-emerald-500/30 text-emerald-400'
+                  : 'bg-white/5 border-white/10 text-slate-300 hover:text-white hover:bg-white/10 disabled:opacity-40'
+              }`}
+            >
+              {secretCopied ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
+              {secretCopied ? 'Copied!' : 'Copy Key'}
+            </button>
           </div>
         </div>
 
