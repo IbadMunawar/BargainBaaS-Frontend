@@ -92,7 +92,7 @@ const Integration = () => {
             <input readOnly value={isLoading ? 'Loading...' : apiKey || '-'} className="flex-1 px-3 py-2 bg-slate-900/60 border border-violet-500/20 rounded-lg text-slate-300 font-mono text-sm focus:outline-none" />
             <CopyBtn value={apiKey} field="apiKey" />
           </div>
-          <p className="mt-2 text-xs text-slate-500">Safe to embed in your storefront's HTML - this key identifies your tenant publicly.</p>
+          <p className="mt-2 text-xs text-slate-500">Safe to embed in your storefront&apos;s HTML - this key identifies your tenant publicly.</p>
         </div>
 
         {/* Live Widget CDN Loader URL Reference */}
@@ -128,7 +128,7 @@ const Integration = () => {
             <p className="text-xs text-red-400 flex items-start gap-2">
               <AlertTriangle className="h-3.5 w-3.5 mt-0.5 flex-shrink-0" />
               <span>
-                <strong>Never expose this secret in client-side code or version control.</strong> Store it in your server's environment variables only (e.g., <code className="font-mono">INA_WEBHOOK_SECRET</code>). All deal verification calls using this secret must originate from your backend server.
+                <strong>Never expose this secret in client-side code or version control.</strong> Store it in your server&apos;s environment variables only (e.g., <code className="font-mono">INA_WEBHOOK_SECRET</code>). All deal verification calls using this secret must originate from your backend server.
               </span>
             </p>
           </div>
