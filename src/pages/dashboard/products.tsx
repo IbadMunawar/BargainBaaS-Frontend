@@ -18,7 +18,8 @@ import {
   HelpCircle,
   FileSpreadsheet,
   Search,
-  Check
+  Check,
+  Trash2
 } from 'lucide-react';
 
 interface Product {
@@ -81,6 +82,9 @@ const ProductsDashboard = () => {
     currency: 'PKR',
     active: true,
   });
+
+  const [deletingId, setDeletingId] = useState<number | null>(null);
+  const [deleteError, setDeleteError] = useState<string | null>(null);
 
   // Fetch products catalog
   const fetchProducts = useCallback(async () => {
@@ -296,6 +300,26 @@ const ProductsDashboard = () => {
     });
   };
 
+  async function handleDelete(productId: number, productName: string) {
+    const confirmed = window.confirm(`Delete "${productName}"? This cannot be undone.`);
+    if (!confirmed) return;
+    setDeletingId(productId);
+    setDeleteError(null);
+    try {
+      const res = await authFetch(`/api/saas/products/${productId}`, 'DELETE');
+      if (res.ok || res.status === 204) {
+        setProducts((prev) => prev.filter((p) => p.id !== productId));
+      } else {
+        const data = await res.json().catch(() => ({}));
+        setDeleteError(data.detail || 'Failed to delete product.');
+      }
+    } catch (err: any) {
+      setDeleteError(err.message || 'Network error.');
+    } finally {
+      setDeletingId(null);
+    }
+  }
+
   // Filter products by search query
   const filteredProducts = products.filter(
     (p) =>
@@ -306,6 +330,22 @@ const ProductsDashboard = () => {
   return (
     <DashboardLayout pageTitle="Product Catalog Management">
       <div className="max-w-6xl mx-auto space-y-8">
+        
+        {deleteError && (
+          <div className="p-4 rounded-xl bg-red-500/10 border border-red-500/20 text-red-400 text-sm flex items-center justify-between gap-2">
+            <div className="flex items-center gap-2">
+              <AlertTriangle className="h-4 w-4" />
+              {deleteError}
+            </div>
+            <button 
+              onClick={() => setDeleteError(null)}
+              className="text-red-400 hover:text-red-300 transition"
+              title="Dismiss error"
+            >
+              <X className="h-4 w-4" />
+            </button>
+          </div>
+        )}
         
         {/* Confidentiality Warning Header */}
         <div className="p-4 rounded-xl border border-red-500/20 bg-red-500/5 flex items-start gap-3">
@@ -613,13 +653,27 @@ const ProductsDashboard = () => {
                               </button>
                             </div>
                           ) : (
-                            <button
-                              onClick={() => startEditing(product)}
-                              className="p-1.5 text-slate-400 hover:text-white hover:bg-white/5 border border-transparent hover:border-white/10 rounded-lg transition"
-                              title="Edit price variables"
-                            >
-                              <Edit3 className="h-4 w-4" />
-                            </button>
+                            <div className="flex items-center justify-end gap-2">
+                              <button
+                                onClick={() => startEditing(product)}
+                                className="p-1.5 text-slate-400 hover:text-white hover:bg-white/5 border border-transparent hover:border-white/10 rounded-lg transition"
+                                title="Edit price variables"
+                              >
+                                <Edit3 className="h-4 w-4" />
+                              </button>
+                              <button
+                                onClick={() => handleDelete(product.id, product.name)}
+                                disabled={deletingId === product.id}
+                                className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium bg-red-500/10 border border-red-500/20 text-red-400 hover:bg-red-500/20 transition disabled:opacity-40 disabled:cursor-not-allowed"
+                              >
+                                {deletingId === product.id ? (
+                                  <span className="animate-spin h-3 w-3 border border-red-400 border-t-transparent rounded-full" />
+                                ) : (
+                                  <Trash2 className="h-3 w-3" />
+                                )}
+                                {deletingId === product.id ? 'Deleting...' : 'Delete'}
+                              </button>
+                            </div>
                           )}
                         </td>
                       </tr>

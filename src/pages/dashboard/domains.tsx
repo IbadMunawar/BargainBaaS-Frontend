@@ -189,6 +189,16 @@ const DomainsDashboard = () => {
           </div>
         </div>
 
+        <div className="p-5 rounded-2xl border border-blue-500/20 bg-blue-500/5 mb-6">
+          <h3 className="text-sm font-semibold text-white mb-1">Why add multiple domains?</h3>
+          <ul className="text-xs text-slate-400 space-y-1.5 list-disc list-inside">
+            <li><span className="text-slate-300">Staging vs Production:</span> Add both <code className="text-blue-300">staging.yourshop.com</code> and <code className="text-blue-300">yourshop.com</code> so the widget works during development.</li>
+            <li><span className="text-slate-300">Local development:</span> Add <code className="text-blue-300">localhost</code> to test on your machine. All ports (3000, 8080, etc.) are covered by this single entry.</li>
+            <li><span className="text-slate-300">Multi-region storefronts:</span> Add each country subdomain separately (e.g., <code className="text-blue-300">pk.yourshop.com</code>, <code className="text-blue-300">ae.yourshop.com</code>).</li>
+            <li><span className="text-slate-300">Security:</span> Widget session initialisation requests from any domain NOT in this list are rejected with a 403. Protect your negotiation sessions.</li>
+          </ul>
+        </div>
+
         {/* General page errors */}
         {apiError && (
           <div className="p-4 rounded-xl bg-red-500/10 border border-red-500/20 text-red-400 text-sm flex items-center gap-2">
