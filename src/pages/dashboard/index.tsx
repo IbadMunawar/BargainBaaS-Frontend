@@ -91,12 +91,7 @@ const Analytics = () => {
       }
     };
 
-    const token = localStorage.getItem('jwt_token');
-    if (!token) {
-      window.location.href = '/auth/login';
-    } else {
-      fetchSummary();
-    }
+    fetchSummary();
   }, []);
 
   const [chartData] = useState({

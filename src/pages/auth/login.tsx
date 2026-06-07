@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { Mail, Lock, LogIn, Zap } from 'lucide-react';
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
+import { setAuthCookie } from '@/lib/auth-cookies';
 
 const LoginPage: React.FC = () => {
   const [email, setEmail] = useState('');
@@ -40,6 +41,8 @@ const LoginPage: React.FC = () => {
       if (response.ok) {
         localStorage.setItem('jwt_token', data.access_token);
         localStorage.setItem('user_email', email);
+        // Sync JWT to httpOnly cookie so Edge Middleware can gate routes
+        await setAuthCookie(data.access_token);
         router.push('/dashboard');
       } else {
         let errorMessage = 'Login failed. Please check your credentials.';

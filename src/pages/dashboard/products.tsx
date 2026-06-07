@@ -102,14 +102,9 @@ const ProductsDashboard = () => {
     }
   }, []);
 
-  // On mount check auth & fetch
+  // On mount fetch products
   useEffect(() => {
-    const token = localStorage.getItem('jwt_token');
-    if (!token) {
-      window.location.href = '/auth/login';
-    } else {
-      fetchProducts();
-    }
+    fetchProducts();
   }, [fetchProducts]);
 
   // CSV Template download content (Data URI)

@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { Mail, Lock, User, UserPlus, Zap } from 'lucide-react';
 import React, { useState } from 'react';
 import { useRouter } from 'next/router';
+import { setAuthCookie } from '@/lib/auth-cookies';
 
 const SignUpPage: React.FC = () => {
   const [name, setName] = useState('');
@@ -27,6 +28,8 @@ const SignUpPage: React.FC = () => {
         localStorage.setItem('jwt_token', data.access_token);
         localStorage.setItem('user_email', email);
         localStorage.setItem('user_name', name);
+        // Sync JWT to httpOnly cookie so Edge Middleware can gate routes
+        await setAuthCookie(data.access_token);
         router.push('/dashboard');
       } else {
         setError(data.detail || 'Registration failed. That email may already be in use.');

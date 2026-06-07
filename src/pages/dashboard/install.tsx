@@ -56,12 +56,7 @@ const InstallDashboard = () => {
       }
     };
     
-    const token = localStorage.getItem('jwt_token');
-    if (!token) {
-      window.location.href = '/auth/login';
-    } else {
-      loadConfiguration();
-    }
+    loadConfiguration();
   }, []);
 
   // Embed script snippet

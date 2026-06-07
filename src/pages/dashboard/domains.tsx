@@ -70,14 +70,9 @@ const DomainsDashboard = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // Auth check & load data on mount
+  // Load data on mount
   useEffect(() => {
-    const token = localStorage.getItem('jwt_token');
-    if (!token) {
-      window.location.href = '/auth/login';
-    } else {
-      fetchDomains();
-    }
+    fetchDomains();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

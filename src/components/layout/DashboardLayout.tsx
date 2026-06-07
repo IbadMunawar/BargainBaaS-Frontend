@@ -1,6 +1,8 @@
 import Link from 'next/link';
 import React, { useState, useEffect } from 'react';
 import { LayoutDashboard, Key, Book, Menu, X, LogOut, Code, Cpu, Package, Globe } from 'lucide-react';
+import AuthGuard from '@/components/guards/AuthGuard';
+import { removeAuthCookie } from '@/lib/auth-cookies';
 
 // Configuration page removed from nav
 const dashboardLinks = [
@@ -31,14 +33,17 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children, pageTitle }
     }
   }, []);
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
     localStorage.removeItem('jwt_token');
     localStorage.removeItem('user_email');
     localStorage.removeItem('user_name');
+    // Clear the httpOnly session cookie
+    await removeAuthCookie();
     window.location.href = '/auth/login';
   };
 
   return (
+    <AuthGuard>
     <div className="flex h-screen bg-slate-950 font-sans antialiased">
 
       {/* Mobile Sidebar Toggle */}
@@ -157,6 +162,7 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children, pageTitle }
         </main>
       </div>
     </div>
+    </AuthGuard>
   );
 };
 

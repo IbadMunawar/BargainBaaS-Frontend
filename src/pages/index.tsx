@@ -175,7 +175,7 @@ const MockChatWidget: React.FC = () => (
       <div className="glass-card rounded-xl px-3 py-2.5 text-center bubble-in" style={{ animationDelay: '0s' }}>
         <p className="text-[11px] text-slate-400">Negotiating for</p>
         <p className="text-sm font-semibold text-white">Sony WH-1000XM5</p>
-        <p className="text-xs text-blue-400 font-medium">Listed at $349</p>
+        <p className="text-xs text-blue-400 font-medium">Listed at Rs. 349</p>
       </div>
 
       {/* Bot message */}
@@ -197,7 +197,7 @@ const MockChatWidget: React.FC = () => (
           className="rounded-2xl rounded-br-none px-3.5 py-2.5 text-sm text-white max-w-[75%]"
           style={{ background: 'linear-gradient(135deg, #3b82f6, #6366f1)' }}
         >
-          How about $290?
+          How about Rs. 290?
         </div>
         <div className="w-6 h-6 rounded-full bg-slate-600 flex items-center justify-center flex-shrink-0">
           <User className="h-3 w-3 text-slate-300" />
@@ -213,7 +213,7 @@ const MockChatWidget: React.FC = () => (
           className="rounded-2xl rounded-bl-none px-3.5 py-2.5 text-sm text-slate-200 max-w-[80%]"
           style={{ background: 'rgba(99,102,241,0.15)', border: '1px solid rgba(99,102,241,0.2)' }}
         >
-          That&apos;s a stretch! I can do <strong className="text-blue-300">$318</strong> — still $31 off. Deal?
+          That&apos;s a stretch! I can do <strong className="text-blue-300">Rs. 318</strong> — still Rs. 31 off. Deal?
         </div>
       </div>
 
