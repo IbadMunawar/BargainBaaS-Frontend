@@ -4,7 +4,7 @@ import Navbar from '../components/layout/Navbar';
 import Footer from '../components/layout/Footer';
 import {
   BrainCircuit,
-  Database,
+  Zap,
   ShieldCheck,
   TrendingUp,
   Code2,
@@ -21,10 +21,10 @@ const FeaturesPage: React.FC = () => {
   return (
     <>
       <Head>
-        <title>Features | BargainBaaS — AI Negotiation Architecture</title>
+        <title>Features | BargainBaaS — Enterprise AI Negotiation Platform</title>
         <meta
           name="description"
-          content="Explore LangGraph-powered AI orchestration, Redis-backed session memory, server-to-server security, and cryptographic deal locking — the technology stack behind BargainBaaS."
+          content="Discover how BargainBaaS transforms eCommerce conversions with an autonomous AI negotiation engine, enterprise-grade margin protection, and effortless low-code integration."
         />
       </Head>
 
@@ -125,17 +125,17 @@ const HeroSection: React.FC = () => (
       </h1>
 
       <p className="text-xl text-slate-400 max-w-2xl mx-auto leading-relaxed">
-        Three precision-engineered pillars — a stateful AI brain, enterprise security, and
-        a seamless integration layer — working together to close deals without sacrificing
-        margins.
+        Three precision-engineered pillars — an autonomous negotiation engine, an airtight
+        margin protection layer, and effortless low-code integration — working together to close
+        deals without sacrificing profitability.
       </p>
 
       {/* Pillar anchor pills */}
       <div className="flex flex-wrap justify-center gap-3 mt-10">
         {[
-          { label: '01 · Stateful AI Brain', href: '#pillar-1' },
-          { label: '02 · Security & Rules', href: '#pillar-2' },
-          { label: '03 · Integration & Checkout', href: '#pillar-3' },
+          { label: '01 · Autonomous Negotiator', href: '#pillar-1' },
+          { label: '02 · Margin Shield Matrix', href: '#pillar-2' },
+          { label: '03 · Low-Code Integration', href: '#pillar-3' },
         ].map(({ label, href }) => (
           <a
             key={href}
@@ -156,7 +156,7 @@ const HeroSection: React.FC = () => (
 
 
 // ======================================================================
-// 2. PILLAR 1 — STATEFUL AI BRAIN
+// 2. PILLAR 1 — AUTONOMOUS NEGOTIATOR
 // ======================================================================
 
 const PillarOneSection: React.FC = () => (
@@ -178,7 +178,7 @@ const PillarOneSection: React.FC = () => (
         <div>
           <SectionLabel>Pillar 01</SectionLabel>
           <h2 className="text-3xl md:text-4xl font-extrabold text-white leading-tight">
-            The Stateful AI Brain
+            The Autonomous Negotiator
           </h2>
         </div>
       </div>
@@ -196,34 +196,34 @@ const PillarOneSection: React.FC = () => (
         <GlowLine from="#3b82f6" to="#6366f1" />
 
         <div className="grid md:grid-cols-2 gap-10">
-          {/* Feature A: LangGraph */}
+          {/* Feature A */}
           <FeatureBlock
             icon={<BrainCircuit className="h-5 w-5 text-blue-400" />}
             iconBg="rgba(59,130,246,0.15)"
             iconBorder="rgba(59,130,246,0.3)"
-            tag="Core Orchestrator"
-            title="LangGraph-Powered Orchestrator"
-            description="Moves beyond simple keyword matching. Our AI uses advanced graph-based state management to handle unstructured negotiation loops, counter-offers, and dynamic intent recognition — all within a single coherent session."
+            tag="Core Engine"
+            title="Context-Aware Negotiation Engine"
+            description="Our AI doesn't rely on keyword matching or decision trees. It mimics expert human bargaining instincts — recognizing consumer intent, adapting counter-offer strategies dynamically, and closing deals natively without ever losing conversational context."
             bullets={[
-              'Graph-based state machine handles complex multi-turn negotiation flows.',
-              'Intent recognition distinguishes initial bids, counter-offers, and acceptance.',
-              'Dynamic entity extraction pulls exact monetary offers from free-form text.',
+              'Handles complex multi-turn negotiation flows with full context awareness.',
+              'Distinguishes initial bids, counter-offers, bluffs, and acceptance signals in real time.',
+              'Extracts exact monetary offers from free-form, unstructured text automatically.',
             ]}
             accentColor="#3b82f6"
           />
 
-          {/* Feature B: Redis */}
+          {/* Feature B */}
           <FeatureBlock
-            icon={<Database className="h-5 w-5 text-indigo-400" />}
+            icon={<Zap className="h-5 w-5 text-indigo-400" />}
             iconBg="rgba(99,102,241,0.15)"
             iconBorder="rgba(99,102,241,0.3)"
-            tag="Session Memory"
-            title="Redis-Backed Session Memory"
-            description="Every negotiation is tracked in real-time. We enforce strict offer limits (e.g., max 5 offers) and maintain conversational context perfectly without database latency — keeping the experience instant and stateful."
+            tag="Session Performance"
+            title="Instantaneous Session Hydration"
+            description="Conversations stay snappy and responsive at every interaction. Sessions survive accidental page refreshes and retain full negotiation state dynamically — delivering sub-millisecond response times with zero perceptible latency."
             bullets={[
-              'Sub-millisecond session reads via Redis keep conversations snappy.',
-              'Hard offer-count cap (5 rounds) enforced server-side — not client-side.',
-              'Session context survives page refreshes within the TTL window.',
+              'Near-instant session rehydration keeps conversations feeling native and alive.',
+              'Strict offer-count limits enforced server-side — impossible to circumvent from the client.',
+              'Full conversational context persists seamlessly within the active session window.',
             ]}
             accentColor="#6366f1"
           />
@@ -235,7 +235,7 @@ const PillarOneSection: React.FC = () => (
 
 
 // ======================================================================
-// 3. PILLAR 2 — ENTERPRISE SECURITY & RULES
+// 3. PILLAR 2 — MARGIN SHIELD MATRIX
 // ======================================================================
 
 const PillarTwoSection: React.FC = () => (
@@ -257,44 +257,44 @@ const PillarTwoSection: React.FC = () => (
         <div>
           <SectionLabel>Pillar 02</SectionLabel>
           <h2 className="text-3xl md:text-4xl font-extrabold text-white leading-tight">
-            Enterprise Security & Rules
+            Margin Shield Matrix
           </h2>
         </div>
       </div>
 
       {/* Two glassy cards in a responsive grid */}
       <div className="grid md:grid-cols-2 gap-8">
-        {/* Card: Server-to-Server Proxy */}
+        {/* Card: Enterprise Security */}
         <SecurityCard
           icon={<ShieldCheck className="h-6 w-6 text-white" />}
           iconGradient="linear-gradient(135deg, #6366f1, #8b5cf6)"
           iconGlow="rgba(99,102,241,0.4)"
           borderAccent="rgba(99,102,241,0.25)"
-          tag="Proxy Architecture"
-          title="Server-to-Server Proxy Architecture"
-          description="Tenant API keys are never exposed to the browser. Our Next.js API route secures all communication between the frontend widget and the INA Backend — acting as an authenticated, server-side middleman."
+          tag="Zero-Exposure Security"
+          title="Enterprise Security Perimeter"
+          description="Your tenant access keys live strictly inside secure, isolated server environments — completely hidden from browser DevTools, network inspectors, and client-side code. Key interception is architecturally impossible."
           bullets={[
-            'API keys live exclusively in server environment variables.',
-            'Next.js /api proxy authenticates every request before forwarding.',
-            'Zero risk of key interception via browser DevTools or network sniffing.',
+            'API credentials are stored exclusively in secure server-side environments.',
+            'All widget-to-backend communication is authenticated through an isolated server relay.',
+            'Zero attack surface exposed to browser DevTools, proxies, or network sniffing tools.',
           ]}
           hoverBorder="rgba(99,102,241,0.5)"
           hoverGlow="rgba(99,102,241,0.15)"
         />
 
-        {/* Card: MAM Enforcement */}
+        {/* Card: Margin Enforcement */}
         <SecurityCard
           icon={<TrendingUp className="h-6 w-6 text-white" />}
           iconGradient="linear-gradient(135deg, #a78bfa, #ec4899)"
           iconGlow="rgba(167,139,250,0.4)"
           borderAccent="rgba(167,139,250,0.2)"
           tag="Margin Protection"
-          title="Dynamic MAM Enforcement"
-          description="Sellers define a secret Minimum Acceptable Margin (MAM) per product. The AI orchestrator is hardcoded to fiercely protect this baseline — guaranteeing profitability on every deal that gets locked."
+          title="Dynamic Margin Enforcement"
+          description="Merchants set a secret floor price baseline that is processed exclusively server-side. The negotiating user never sees the limit. When the boundary is reached, an automatic take-it-or-leave-it trigger fires instantly — guaranteeing profitability on every deal."
           bullets={[
-            'MAM is stored server-side — never exposed to the negotiating user.',
-            "Every AI counter-offer is validated against the seller&apos;s MAM before sending.",
-            '&ldquo;Take-it-or-leave-it&rdquo; state triggers automatically when floor is reached.',
+            'Secret price floor is stored and enforced entirely server-side — never leaked to the user.',
+            'Every AI counter-offer is validated against the merchant\'s baseline before delivery.',
+            'Automatic final-offer lockdown triggers the instant the floor boundary is reached.',
           ]}
           hoverBorder="rgba(167,139,250,0.5)"
           hoverGlow="rgba(167,139,250,0.12)"
@@ -306,7 +306,7 @@ const PillarTwoSection: React.FC = () => (
 
 
 // ======================================================================
-// 4. PILLAR 3 — INTEGRATION & CHECKOUT
+// 4. PILLAR 3 — LOW-CODE INTEGRATION
 // ======================================================================
 
 const PillarThreeSection: React.FC = () => (
@@ -328,7 +328,7 @@ const PillarThreeSection: React.FC = () => (
         <div>
           <SectionLabel>Pillar 03</SectionLabel>
           <h2 className="text-3xl md:text-4xl font-extrabold text-white leading-tight">
-            Integration & Checkout
+            Low-Code Integration
           </h2>
         </div>
       </div>
@@ -345,29 +345,17 @@ const PillarThreeSection: React.FC = () => (
         <GlowLine from="#0ea5e9" to="#22d3ee" />
 
         <div className="grid md:grid-cols-2 gap-10">
-          {/* Feature A: Script tag */}
+          {/* Feature A: Zero-overhead injection */}
           <FeatureBlock
             icon={<Code2 className="h-5 w-5 text-cyan-400" />}
             iconBg="rgba(14,165,233,0.15)"
             iconBorder="rgba(14,165,233,0.3)"
-            tag="Drop-in Widget"
-            title={
-              <>
-                Drop-in{' '}
-                <code
-                  className="text-cyan-300 font-mono text-[0.9em] px-1.5 py-0.5 rounded"
-                  style={{ background: 'rgba(14,165,233,0.12)' }}
-                >
-                  &lt;script&gt;
-                </code>{' '}
-                Integration
-              </>
-            }
-            description="Inject our lightweight chat widget into any existing eCommerce platform — Next.js, React, Shopify — in minutes. No complex SDK, no backend changes, no re-deploy."
+            tag="Instant Integration"
+            title="Zero-Overhead Injection"
+            description="Works seamlessly across web storefronts with zero framework dependencies. Drop our lightweight payload script straight into your product view template to initialize the runtime engine instantly."
             bullets={[
-              'Single script tag, one data attribute for your tenant API key.',
-              'Works on any HTML page; no framework dependency.',
-              'Widget auto-initialises and mounts to a target DOM element.',
+              'Lightweight widget payload with zero framework dependencies.',
+              'Widget auto-initialises and mounts with zero manual DOM manipulation.',
             ]}
             accentColor="#0ea5e9"
           />
@@ -379,59 +367,56 @@ const PillarThreeSection: React.FC = () => (
             iconBorder="rgba(16,185,129,0.3)"
             tag="Deal Verification"
             title="Cryptographic Deal Verification"
-            description="Before any item is added to the cart, the frontend securely cross-verifies the negotiated price with our backend Verification API — preventing any client-side price tampering or replay attacks."
+            description="Before any negotiated item reaches the cart, the agreed price is cryptographically cross-verified against our backend — automatically rejecting any client-side price tampering or replay attacks before checkout."
             bullets={[
-              'Frontend sends a signed deal token; backend validates authenticity.',
-              'Mismatched or tampered prices are rejected before cart insertion.',
-              'Verification API is rate-limited and scoped per tenant session.',
+              'Signed deal tokens are verified server-side before cart insertion.',
+              'Mismatched or tampered prices are rejected instantly and automatically.',
+              'Verification layer is rate-limited and scoped per tenant session.',
             ]}
             accentColor="#10b981"
           />
         </div>
 
-        {/* Code snippet teaser */}
+        {/* Gated integration payload — replaces exposed code snippet */}
         <div
-          className="mt-10 rounded-xl overflow-hidden"
-          style={{ border: '1px solid rgba(255,255,255,0.07)' }}
+          className="mt-10 rounded-2xl overflow-hidden relative"
+          style={{
+            border: '1px solid rgba(255,255,255,0.07)',
+            background: 'rgba(255,255,255,0.02)',
+            backdropFilter: 'blur(20px)',
+            WebkitBackdropFilter: 'blur(20px)',
+          }}
         >
-          <div
-            className="flex items-center gap-2 px-4 py-2.5"
-            style={{ background: 'rgba(255,255,255,0.04)' }}
-          >
-            <span className="w-2.5 h-2.5 rounded-full bg-red-400/70" />
-            <span className="w-2.5 h-2.5 rounded-full bg-yellow-400/70" />
-            <span className="w-2.5 h-2.5 rounded-full bg-green-400/70" />
-            <span className="ml-2 text-xs text-slate-500 font-mono">integration.html</span>
+          <div className="px-8 py-12 flex flex-col items-center justify-center text-center gap-5">
+            <div
+              className="w-14 h-14 rounded-2xl flex items-center justify-center"
+              style={{
+                background: 'linear-gradient(135deg, rgba(14,165,233,0.15), rgba(34,211,238,0.15))',
+                border: '1px solid rgba(34,211,238,0.25)',
+              }}
+            >
+              <Lock className="h-6 w-6 text-cyan-400" />
+            </div>
+            <div>
+              <p className="text-lg font-bold text-white mb-1">
+                Your Custom Integration Payload
+              </p>
+              <p className="text-sm text-slate-500 max-w-md mx-auto">
+                Sign up to unlock your personalised widget configuration, tenant API key, and
+                deployment instructions tailored to your storefront.
+              </p>
+            </div>
+            <Link
+              href="/auth/signup"
+              className="inline-flex items-center gap-2 px-7 py-3 text-sm font-bold rounded-xl text-white transition-all duration-300"
+              style={{
+                background: 'linear-gradient(135deg, #0ea5e9, #22d3ee)',
+                boxShadow: '0 0 20px rgba(34,211,238,0.3)',
+              }}
+            >
+              Unlock Integration <ArrowRight className="h-4 w-4" />
+            </Link>
           </div>
-          <pre
-            className="px-6 py-5 text-sm font-mono leading-relaxed overflow-x-auto"
-            style={{ background: 'rgba(0,0,0,0.35)', color: '#94a3b8' }}
-          >
-            <code>
-              <span style={{ color: '#64748b' }}>{`<!-- BargainBaaS Widget -->`}</span>
-              {`\n`}
-              <span style={{ color: '#60a5fa' }}>{`<script`}</span>
-              {`\n  `}
-              <span style={{ color: '#34d399' }}>{`src`}</span>
-              <span style={{ color: '#94a3b8' }}>{`="`}</span>
-              <span style={{ color: '#fcd34d' }}>{`https://cdn.bargainbaas.com/widget.js`}</span>
-              <span style={{ color: '#94a3b8' }}>{`"`}</span>
-              {`\n  `}
-              <span style={{ color: '#34d399' }}>{`data-tenant-key`}</span>
-              <span style={{ color: '#94a3b8' }}>{`="`}</span>
-              <span style={{ color: '#fcd34d' }}>{`YOUR_API_KEY`}</span>
-              <span style={{ color: '#94a3b8' }}>{`"`}</span>
-              {`\n  `}
-              <span style={{ color: '#34d399' }}>{`data-target`}</span>
-              <span style={{ color: '#94a3b8' }}>{`="`}</span>
-              <span style={{ color: '#fcd34d' }}>{`#bargain-widget`}</span>
-              <span style={{ color: '#94a3b8' }}>{`"`}</span>
-              {`\n  `}
-              <span style={{ color: '#60a5fa' }}>{`defer`}</span>
-              <span style={{ color: '#60a5fa' }}>{`>`}</span>
-              <span style={{ color: '#60a5fa' }}>{`</script>`}</span>
-            </code>
-          </pre>
         </div>
       </div>
     </div>
@@ -471,7 +456,7 @@ const CtaSection: React.FC = () => (
         </span>
       </h2>
       <p className="text-slate-400 text-lg mb-10">
-        Get your API key, drop in the script tag, and watch negotiation-driven conversions
+        Get your API key, deploy the widget, and watch negotiation-driven conversions
         climb — all without touching your existing checkout flow.
       </p>
       <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
@@ -485,15 +470,9 @@ const CtaSection: React.FC = () => (
         >
           Start Free Trial <ArrowRight className="h-4 w-4" />
         </Link>
-        <Link
-          href="/pricing"
-          className="inline-block px-9 py-4 text-base font-semibold rounded-xl text-blue-300 border border-blue-500/35 hover:border-blue-400 hover:bg-blue-500/10 transition-all duration-300 w-full sm:w-auto text-center"
-        >
-          View Pricing
-        </Link>
       </div>
       <p className="mt-5 text-sm text-slate-600">
-        No credit card required · Free tier available
+        No credit card required · Start building instantly
       </p>
     </div>
   </section>

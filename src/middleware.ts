@@ -24,7 +24,6 @@ const COOKIE_NAME = '__session_token';
 /** Paths accessible without authentication. */
 const PUBLIC_PATHS = [
   '/',
-  '/pricing',
   '/features',
 ];
 
@@ -54,6 +53,11 @@ function isPublicPath(pathname: string): boolean {
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
   const sessionToken = request.cookies.get(COOKIE_NAME)?.value;
+
+  // Redirect /pricing requests to /
+  if (pathname === '/pricing') {
+    return NextResponse.redirect(new URL('/', request.url));
+  }
 
   // ── Public route: allow through ──
   if (isPublicPath(pathname)) {

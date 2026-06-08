@@ -4,7 +4,6 @@ import React, { useState, useEffect } from 'react';
 
 const navLinks = [
   { name: 'Features', href: '/features' },
-  { name: 'Pricing', href: '/pricing' },
 ];
 
 const Navbar: React.FC = () => {
@@ -101,7 +100,7 @@ const Navbar: React.FC = () => {
                 (e.currentTarget as HTMLElement).style.transform = 'translateY(0)';
               }}
             >
-              Get API Key →
+              Start Free Trial →
             </Link>
           </div>
 
@@ -150,7 +149,7 @@ const Navbar: React.FC = () => {
             style={{ background: 'linear-gradient(135deg, #3b82f6, #6366f1)' }}
             onClick={toggleMenu}
           >
-            Get API Key →
+            Start Free Trial →
           </Link>
         </div>
       </div>

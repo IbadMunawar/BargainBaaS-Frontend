@@ -108,13 +108,13 @@ const HeroSection: React.FC = () => (
             href="/auth/signup"
             className="btn-glow inline-block px-8 py-3.5 text-base font-bold rounded-xl text-white w-full sm:w-auto text-center"
           >
-            Get Your API Key →
+            Start Free Trial →
           </Link>
           <Link
-            href="/pricing"
+            href="/features"
             className="inline-block px-8 py-3.5 text-base font-semibold rounded-xl text-blue-300 border border-blue-500/40 hover:border-blue-400 hover:bg-blue-500/10 transition-all duration-300 w-full sm:w-auto text-center"
           >
-            View Pricing
+            Explore Features
           </Link>
         </div>
 
@@ -463,7 +463,7 @@ const HowItWorksSection: React.FC = () => (
           Explore the Full Architecture →
         </Link>
         <p className="mt-4 text-sm text-slate-600">
-          No credit card required · Free tier available
+          No credit card required · Start building instantly
         </p>
       </div>
     </div>
