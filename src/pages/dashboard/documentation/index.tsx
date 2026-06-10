@@ -409,7 +409,7 @@ const Step1Panel: React.FC = () => {
             <code className="font-mono text-xs bg-white/10 px-1.5 py-0.5 rounded text-violet-300">
               {'<Script>'}
             </code>{' '}
-            component with <code className="font-mono text-xs bg-white/10 px-1.5 py-0.5 rounded text-violet-300">strategy="afterInteractive"</code>{' '}
+            component with <code className="font-mono text-xs bg-white/10 px-1.5 py-0.5 rounded text-violet-300">{"strategy=\"afterInteractive\""}</code>{' '}
             to guarantee the widget loads after hydration without blocking your critical render path.
             Place this in your root layout file (<code className="font-mono text-xs bg-white/10 px-1.5 py-0.5 rounded">_app.tsx</code> or{' '}
             <code className="font-mono text-xs bg-white/10 px-1.5 py-0.5 rounded">layout.tsx</code>).
@@ -472,11 +472,11 @@ const Step2Panel: React.FC = () => (
     <InfoBox>
       Lines marked with{' '}
       <code className="font-mono text-xs bg-white/10 px-1.5 py-0.5 rounded">
-        // === BARGAIN_BAAS_INTEGRATION_START ===
+        {"// === BARGAIN_BAAS_INTEGRATION_START ==="}
       </code>{' '}
       and{' '}
       <code className="font-mono text-xs bg-white/10 px-1.5 py-0.5 rounded">
-        // === BARGAIN_BAAS_INTEGRATION_END ===
+        {"// === BARGAIN_BAAS_INTEGRATION_END ==="}
       </code>{' '}
       mark every integration touchpoint for easy auditing and rollback.
     </InfoBox>
