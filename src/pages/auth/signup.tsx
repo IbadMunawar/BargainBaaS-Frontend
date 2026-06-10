@@ -255,21 +255,8 @@ const SignUpPage: React.FC = () => {
             </button>
           </form>
 
-          {/* Terms note */}
-          <p className="text-center text-xs text-slate-600 mt-5">
-            By signing up you agree to our{' '}
-            <Link href="#" className="text-slate-500 hover:text-slate-400 underline underline-offset-2">
-              Terms of Service
-            </Link>{' '}
-            and{' '}
-            <Link href="#" className="text-slate-500 hover:text-slate-400 underline underline-offset-2">
-              Privacy Policy
-            </Link>
-            .
-          </p>
-
           {/* Footer link */}
-          <p className="text-center text-sm text-slate-500 mt-4">
+          <p className="text-center text-sm text-slate-500 mt-7">
             Already have an account?{' '}
             <Link
               href="/auth/login"

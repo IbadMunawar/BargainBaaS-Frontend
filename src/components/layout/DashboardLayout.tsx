@@ -9,7 +9,6 @@ const dashboardLinks = [
   { name: 'Analytics', href: '/dashboard', icon: LayoutDashboard },
   { name: 'Products', href: '/dashboard/products', icon: Package },
   { name: 'Domains', href: '/dashboard/domains', icon: Globe },
-  { name: 'Widget Installation', href: '/dashboard/install', icon: Code },
   { name: 'API Integration', href: '/dashboard/integration', icon: Key },
   { name: 'Documentation', href: '/dashboard/documentation', icon: Book },
 ];
